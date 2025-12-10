@@ -1,10 +1,106 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { Image, Text, TextInput, View } from "react-native";
+import { Link } from "expo-router";
 
 const LoginScreen = () => {
+  const [emailAddress, setEmailAddress] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
   return (
-    <View>
-      <Text>LoginScreen</Text>
+    <View className="flex-1 bg-[#EEF8F7]">
+      {/* SIGNUP FORM */}
+      <View className="flex-1 justify-end">
+        <View className="bg-white w-full h-[70%] rounded-t-[50px] px-6 py-4">
+          <Text className="text-center text-xl font-bold text-[#222222]">
+            Login
+          </Text>
+
+          {/* INPUTS */}
+          <View>
+            {/* EMAIL ADDRESS */}
+            <TextInput
+              placeholder="Email Address"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={emailAddress}
+              onChangeText={setEmailAddress}
+              className="border border-gray-300 p-2 mt-6 h-12 rounded-md"
+            />
+
+            {/* PASSWORD */}
+            <TextInput
+              placeholder="Password"
+              keyboardType="default"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+              className="border border-gray-300 p-2 mt-6 h-12 rounded-md"
+            />
+          </View>
+
+          {/* SIGNUP BUTTON */}
+          <View className="mt-6">
+            <View className="bg-[#69AEA9] px-6 py-4 rounded-full mx-8 shadow-md elevation-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+              <Text className="text-lg text-white text-center font-semibold ">
+                Log In
+              </Text>
+            </View>
+          </View>
+
+          {/* OTHER OPTIONS */}
+          <View className="flex-row items-center mt-6 gap-2">
+            <View className="h-px flex-1 bg-gray-300"></View>
+            <Text className="text-center text-gray-400">Or Login With</Text>
+            <View className="h-px flex-1 bg-gray-300"></View>
+          </View>
+
+          {/* SOCIAL BUTTONS */}
+          <View className="flex-row items-center gap-6 mx-auto mt-6">
+            {/* GOOGLE */}
+            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+              <Image
+                source={require("../../assets/icons/google.png")}
+                className="size-8"
+              />
+            </View>
+
+            {/* FACEBOOK */}
+            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+              <Image
+                source={require("../../assets/icons/facebook.png")}
+                className="size-8"
+              />
+            </View>
+
+            {/* X (Twitter) */}
+            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+              <Image
+                source={require("../../assets/icons/twitter-x.png")}
+                className="size-8"
+              />
+            </View>
+          </View>
+
+          {/* SIGNUP LINK */}
+          <View className="flex-row items-center mt-6 gap-2">
+            <Text className="text-center text-gray-400 mx-auto">
+              Don't have an account?{" "}
+              <Link
+                href="/(auth)/SignupScreen"
+                style={{
+                  color: "#438883",
+                  fontWeight: 600,
+                }}
+              >
+                Signup
+              </Link>
+            </Text>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
