@@ -1,10 +1,34 @@
 import { useState } from "react";
-import { Image, Text, TextInput, View } from "react-native";
-import { Link } from "expo-router";
+import { Alert, Image, Pressable, Text, TextInput, View } from "react-native";
+import { Link, router } from "expo-router";
+import { createUserWithEmailAndPassword } from "@/services/auth.service";
 
 const SignupScreen = () => {
   const [emailAddress, setEmailAddress] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  async function signup() {
+    if (!emailAddress || !password) {
+      Alert.alert(
+        "Invalid details",
+        "Please enter a valid email address and password",
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+      Alert.alert("Weak password", "Password must be at least 8 characters");
+      return;
+    }
+
+    const user = await createUserWithEmailAndPassword(emailAddress, password);
+
+    if (user) {
+      router.replace("/(tabs)");
+    } else {
+      Alert.alert("Try again", "Signup failed");
+    }
+  }
 
   return (
     <View className="flex-1 bg-[#EEF8F7]">
@@ -43,11 +67,14 @@ const SignupScreen = () => {
 
           {/* SIGNUP BUTTON */}
           <View className="mt-6">
-            <View className="bg-[#69AEA9] px-6 py-4 rounded-full mx-8 shadow-md elevation-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+            <Pressable
+              className="bg-[#69AEA9] px-6 py-4 rounded-full mx-8 shadow-md elevation-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]"
+              onPress={signup}
+            >
               <Text className="text-lg text-white text-center font-semibold ">
                 Sign Up
               </Text>
-            </View>
+            </Pressable>
           </View>
 
           {/* OTHER OPTIONS */}
