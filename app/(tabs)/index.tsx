@@ -1,4 +1,4 @@
-import { View, Text, StatusBar, Pressable } from "react-native";
+import { View, Text, StatusBar, Pressable, Image } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -86,6 +86,33 @@ const index = () => {
             </View>
           </View>
         </SafeAreaView>
+      </View>
+
+      {/* TRANSACTION LIST */}
+      <View className="flex-1 mt-[100px] px-6 py-4">
+        <Text className="text-lg font-semibold">Transactions history</Text>
+
+        {/* TRANSACTION CARD */}
+        <View className="flex-row items-center gap-3 mt-2 mb-2">
+          {/* LOGO / CATEGORY ICON */}
+          <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
+            <Image
+              source={require("../../assets/icons/category-icons/youtube-premium.png")}
+              className="size-8"
+            />
+          </View>
+
+          {/* BRAND / CATEGORY NAME + DATE */}
+          <View>
+            <Text className="font-medium">Youtube</Text>
+            <Text className="text-[#666666] text-sm">Dec 11, 2025</Text>
+          </View>
+
+          {/* TRANSACTION AMOUNT */}
+          <View className="ml-auto">
+            <Text className="text-lg text-[#F95B51] font-semibold">- ₹500</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
