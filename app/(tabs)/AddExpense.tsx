@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
 import { useEffect, useState } from "react";
+import { account } from "@/libs/appwrite";
 
 interface DropdownItems {
   label: string;
@@ -22,6 +23,7 @@ const AddExpense = () => {
   const [type, setType] = useState<"income" | "expense">("income");
   const [category, setCategory] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
 
   const typeDropdownList: DropdownItems[] = [
     { label: "Income", value: "income" },
@@ -60,6 +62,14 @@ const AddExpense = () => {
   useEffect(() => {
     setCategory("");
   }, [type]);
+
+  useEffect(() => {
+    async function loadUserId() {
+      const user = await account.get();
+      setUserId(user.$id);
+    }
+    loadUserId();
+  }, []);
 
   return (
     <View className="flex-1 bg-neutral-50">
