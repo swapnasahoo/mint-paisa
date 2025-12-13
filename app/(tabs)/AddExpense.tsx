@@ -1,16 +1,17 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  StyleSheet,
-  Pressable,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { Dropdown } from "react-native-element-dropdown";
-import { useEffect, useState } from "react";
 import { account } from "@/libs/appwrite";
+import { createTransaction } from "@/services/transaction.service";
+import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import {
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface DropdownItems {
   label: string;
@@ -151,7 +152,29 @@ const AddExpense = () => {
             </View>
 
             {/* CREATE BUTTON */}
-            <Pressable className="bg-[#69AEA9] px-6 py-2 mt-2 rounded-md shadow-md elevation-sm transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]">
+            <Pressable
+              className="bg-[#69AEA9] px-6 py-2 mt-2 rounded-md shadow-md elevation-sm transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]"
+              onPress={async () => {
+                if (!userId) return;
+                if (!Number(amount.trim())) return alert("Enter an amount");
+
+                try {
+                  const transaction = await createTransaction({
+                    userId,
+                    type,
+                    category,
+                    amount: Number(amount),
+                  });
+                  alert("Transaction created successfully!");
+                  setType("income");
+                  setCategory("");
+                  setAmount("");
+                } catch (error) {
+                  console.log("Error creating transaction:", error);
+                  alert("Failed to create transaction. Please try again.");
+                }
+              }}
+            >
               <Text className="text-lg text-white font-medium text-center uppercase">
                 Create
               </Text>
