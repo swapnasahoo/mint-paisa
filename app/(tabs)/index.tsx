@@ -2,7 +2,8 @@ import { TransactionRow } from "@/interfaces/TransactionRow";
 import { account } from "@/libs/appwrite";
 import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -34,32 +35,41 @@ const index = () => {
   }, []);
 
   // FETCH USER TRANSACTIONS
-  useEffect(() => {
-    async function fetchUserTransactions() {
-      if (!userId) return;
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      async function fetchUserTransactions() {
+        if (!userId) return;
 
-      const data = await fetchTransactions(userId);
-      setTransactions(data?.rows || []);
+        const data = await fetchTransactions(userId);
+        setTransactions(data?.rows || []);
 
-      // CALCULATE TOTALS
-      let balance = data?.rows.reduce((acc, transaction) => {
-        return acc + transaction.amount;
-      }, 0);
+        // CALCULATE TOTALS
+        let balance = data?.rows.reduce((acc, transaction) => {
+          return acc + transaction.amount;
+        }, 0);
 
-      const income = data?.rows.reduce((acc, transaction) => {
-        return transaction.type === "income" ? acc + transaction.amount : acc;
-      }, 0);
+        const income = data?.rows.reduce((acc, transaction) => {
+          return transaction.type === "income" ? acc + transaction.amount : acc;
+        }, 0);
 
-      const expense = data?.rows.reduce((acc, transaction) => {
-        return transaction.type === "expense" ? acc + transaction.amount : acc;
-      }, 0);
+        const expense = data?.rows.reduce((acc, transaction) => {
+          return transaction.type === "expense"
+            ? acc + transaction.amount
+            : acc;
+        }, 0);
 
-      setTotalBalance(balance || 0);
-      setTotalIncome(income || 0);
-      setTotalExpense(expense || 0);
-    }
-    fetchUserTransactions();
-  }, [userId]);
+        setTotalBalance(balance || 0);
+        setTotalIncome(income || 0);
+        setTotalExpense(expense || 0);
+      }
+      isActive && fetchUserTransactions();
+
+      return () => {
+        isActive = false;
+      };
+    }, [userId])
+  );
 
   return (
     <View className="flex-1 bg-neutral-50">
