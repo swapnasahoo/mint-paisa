@@ -1,7 +1,7 @@
+import { logInUserWithEmailAndPassword } from "@/services/auth.service";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Pressable, Text, TextInput, View } from "react-native";
-import { Link, router } from "expo-router";
-import { logInUserWithEmailAndPassword } from "@/services/auth.service";
 
 const LoginScreen = () => {
   const [emailAddress, setEmailAddress] = useState<string>("");
@@ -11,7 +11,7 @@ const LoginScreen = () => {
     if (!emailAddress || !password) {
       Alert.alert(
         "Invalid details",
-        "Please enter a valid email address and password",
+        "Please enter a valid email address and password"
       );
       return;
     }
@@ -42,27 +42,38 @@ const LoginScreen = () => {
           {/* INPUTS */}
           <View>
             {/* EMAIL ADDRESS */}
-            <TextInput
-              placeholder="Email Address"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              value={emailAddress}
-              onChangeText={setEmailAddress}
-              className="border border-gray-300 p-2 mt-6 h-12 rounded-md"
-            />
-
+            <View className="mt-6 gap-1">
+              <Text className="text-sm text-[#666666] font-semibold tracking-wider">
+                EMAIL ADDRESS
+              </Text>
+              <TextInput
+                placeholder="Email Address"
+                placeholderTextColor="#9E9E9E"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                value={emailAddress}
+                onChangeText={setEmailAddress}
+                className="border border-gray-300 p-2 h-12 rounded-md text-[#111827]"
+              />
+            </View>
             {/* PASSWORD */}
-            <TextInput
-              placeholder="Password"
-              keyboardType="default"
-              autoCapitalize="none"
-              autoCorrect={false}
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-              className="border border-gray-300 p-2 mt-6 h-12 rounded-md"
-            />
+            <View className="mt-4 gap-1">
+              <Text className="text-sm text-[#666666] font-semibold tracking-wider">
+                PASSWORD
+              </Text>
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor="#9E9E9E"
+                keyboardType="default"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+                className="border border-gray-300 p-2 h-12 rounded-md text-[#111827]"
+              />
+            </View>
           </View>
 
           {/* SIGNUP BUTTON */}
