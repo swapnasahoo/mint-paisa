@@ -1,12 +1,65 @@
-import { View, Text, StatusBar, Pressable, Image } from "react-native";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { TransactionRow } from "@/interfaces/TransactionRow";
+import { account } from "@/libs/appwrite";
+import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const index = () => {
   StatusBar.setBarStyle("light-content");
 
   const [isTotalVisible, setIsTotalVisible] = useState<boolean>(true);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [transactions, setTransactions] = useState<TransactionRow[]>([]);
+  const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [totalIncome, setTotalIncome] = useState<number>(0);
+  const [totalExpense, setTotalExpense] = useState<number>(0);
+
+  // FETCH USER ID
+  useEffect(() => {
+    async function fetchUserId() {
+      const user = await account.get();
+      setUserId(user.$id);
+    }
+
+    fetchUserId();
+  }, []);
+
+  // FETCH USER TRANSACTIONS
+  useEffect(() => {
+    async function fetchUserTransactions() {
+      if (!userId) return;
+
+      const data = await fetchTransactions(userId);
+      setTransactions(data?.rows || []);
+
+      // CALCULATE TOTALS
+      let balance = data?.rows.reduce((acc, transaction) => {
+        return acc + transaction.amount;
+      }, 0);
+
+      const income = data?.rows.reduce((acc, transaction) => {
+        return transaction.type === "income" ? acc + transaction.amount : acc;
+      }, 0);
+
+      const expense = data?.rows.reduce((acc, transaction) => {
+        return transaction.type === "expense" ? acc + transaction.amount : acc;
+      }, 0);
+
+      setTotalBalance(balance || 0);
+      setTotalIncome(income || 0);
+      setTotalExpense(expense || 0);
+    }
+    fetchUserTransactions();
+  }, [userId]);
 
   return (
     <View className="flex-1 bg-neutral-50">
@@ -48,9 +101,11 @@ const index = () => {
 
               {/* BALANCE */}
               <Text
-                className={`text-white text-3xl font-bold ${isTotalVisible ? "block" : "hidden"}`}
+                className={`text-white text-3xl font-bold ${
+                  isTotalVisible ? "block" : "hidden"
+                }`}
               >
-                ₹500.00
+                ₹{totalBalance.toFixed(2)}
               </Text>
             </View>
 
@@ -66,7 +121,7 @@ const index = () => {
                 </View>
                 {/* INCOME BALANCE */}
                 <Text className="text-xl text-white font-semibold text-right">
-                  ₹1000.00
+                  {totalIncome.toFixed(2)}
                 </Text>
               </View>
 
@@ -80,7 +135,7 @@ const index = () => {
                 </View>
                 {/* INCOME BALANCE */}
                 <Text className="text-xl text-white font-semibold text-right">
-                  ₹500.00
+                  ₹{totalExpense.toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -92,27 +147,47 @@ const index = () => {
       <View className="flex-1 mt-[100px] px-6 py-4">
         <Text className="text-lg font-semibold">Transactions history</Text>
 
-        {/* TRANSACTION CARD */}
-        <View className="flex-row items-center gap-3 mt-2 mb-2">
-          {/* LOGO / CATEGORY ICON */}
-          <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
-            <Image
-              source={require("../../assets/icons/category-icons/youtube-premium.png")}
-              className="size-8"
-            />
-          </View>
+        <FlatList
+          data={transactions}
+          keyExtractor={(item) => item.$id}
+          showsVerticalScrollIndicator={false}
+          className="mt-4"
+          renderItem={({ item }) => (
+            /* TRANSACTION CARD */
+            <View className="flex-row items-center gap-3 mt-2 mb-2">
+              {/* LOGO / CATEGORY ICON */}
+              <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
+                <Image
+                  source={require("../../assets/icons/category-icons/youtube-premium.png")}
+                  className="size-8"
+                />
+              </View>
 
-          {/* BRAND / CATEGORY NAME + DATE */}
-          <View>
-            <Text className="font-medium">Youtube</Text>
-            <Text className="text-[#666666] text-sm">Dec 11, 2025</Text>
-          </View>
+              {/* BRAND / CATEGORY NAME + DATE */}
+              <View>
+                <Text className="font-medium">{item.category}</Text>
+                <Text className="text-[#666666] text-sm">
+                  {new Date(item.$createdAt).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                  })}
+                </Text>
+              </View>
 
-          {/* TRANSACTION AMOUNT */}
-          <View className="ml-auto">
-            <Text className="text-lg text-[#F95B51] font-semibold">- ₹500</Text>
-          </View>
-        </View>
+              {/* TRANSACTION AMOUNT */}
+              <View className="ml-auto">
+                <Text
+                  className={`${
+                    item.type === "income" ? "text-[#3CB371]" : "text-[#F95B51]"
+                  } text-lg font-semibold`}
+                >
+                  {`${item.type === "income" ? "+" : "-"} ₹${item.amount}`}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
