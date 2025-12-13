@@ -1,12 +1,15 @@
+import { TransactionRow } from "@/interfaces/TransactionRow";
 import { tablesDB } from "@/libs/appwrite";
-import { ID, Query } from "react-native-appwrite";
+import { ID, Models, Query } from "react-native-appwrite";
 
 const TRANSACTIONS_DATABASE_ID: string =
   process.env.EXPO_PUBLIC_APPWRITE_DATABASE_TRANSACTIONS_ID!;
 const TRANSACTIONS_ENTRIES_TABLE_ID: string =
   process.env.EXPO_PUBLIC_APPWRITE_TABLE_TRANSACTIONS_ENTRIES_ID!;
 
-export async function fetchTransactions(userId: string) {
+export async function fetchTransactions(
+  userId: string
+): Promise<Models.RowList<TransactionRow> | null> {
   try {
     return await tablesDB.listRows({
       databaseId: TRANSACTIONS_DATABASE_ID,
