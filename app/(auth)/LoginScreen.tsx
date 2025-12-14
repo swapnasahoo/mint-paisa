@@ -25,8 +25,6 @@ const LoginScreen = () => {
 
     if (user) {
       router.replace("/(tabs)");
-    } else {
-      Alert.alert("Try again", "Login failed");
     }
   }
 

@@ -25,8 +25,6 @@ const SignupScreen = () => {
 
     if (user) {
       router.replace("/(tabs)");
-    } else {
-      Alert.alert("Try again", "Signup failed");
     }
   }
 
