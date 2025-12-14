@@ -1,6 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
 
 interface TabBarIconProps {
   icon: string;
@@ -56,7 +56,7 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="AddExpense"
+        name="AddTransaction"
         options={{
           tabBarIcon: ({ focused, size, color }) => (
             <TabBarIcon

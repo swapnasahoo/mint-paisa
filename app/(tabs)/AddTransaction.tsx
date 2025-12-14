@@ -19,7 +19,7 @@ interface DropdownItems {
   value: string;
 }
 
-const AddExpense = () => {
+const AddTransaction = () => {
   StatusBar.setBarStyle("light-content");
 
   const [type, setType] = useState<"income" | "expense">("income");
@@ -216,4 +216,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default AddExpense;
+export default AddTransaction;
