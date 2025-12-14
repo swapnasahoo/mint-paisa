@@ -2,6 +2,7 @@ import { account } from "@/libs/appwrite";
 import showToast from "@/libs/showToast";
 import { createTransaction } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
 import {
   Pressable,
@@ -25,7 +26,10 @@ const AddTransaction = () => {
   const [type, setType] = useState<"income" | "expense">("income");
   const [category, setCategory] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
   const [userId, setUserId] = useState<string>("");
+
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const typeDropdownList: DropdownItems[] = [
     { label: "Income", value: "income" },
@@ -150,6 +154,28 @@ const AddTransaction = () => {
                   setAmount(cleaned);
                 }}
               />
+            </View>
+
+            {/* DATE */}
+            <View>
+              <Text className="text-sm text-[#666666] font-semibold">DATE</Text>
+              <Pressable
+                style={style.inputStyle}
+                onPress={() => setShowDatePicker(true)}
+              >
+                <Text>{date.toLocaleDateString("en-IN")}</Text>
+              </Pressable>
+
+              {showDatePicker && (
+                <DateTimePicker
+                  value={date}
+                  display="spinner"
+                  onChange={(event, selectedDate) => {
+                    setDate(selectedDate || date);
+                    setShowDatePicker(false);
+                  }}
+                />
+              )}
             </View>
 
             {/* CREATE BUTTON */}
