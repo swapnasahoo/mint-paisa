@@ -1,4 +1,5 @@
 import { account } from "@/libs/appwrite";
+import showToast from "@/libs/showToast";
 import { createTransaction } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
@@ -165,13 +166,21 @@ const AddExpense = () => {
                     category,
                     amount: Number(amount),
                   });
-                  alert("Transaction created successfully!");
+                  showToast({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Transaction created succesfully",
+                  });
                   setType("income");
                   setCategory("");
                   setAmount("");
                 } catch (error) {
                   console.log("Error creating transaction:", error);
-                  alert("Failed to create transaction. Please try again.");
+                  showToast({
+                    type: "error",
+                    text1: "Failed",
+                    text2: "Could not create transaction. Please try again.",
+                  });
                 }
               }}
             >
