@@ -27,11 +27,13 @@ export async function createTransaction({
   type,
   category,
   amount,
+  date,
 }: {
   userId: string;
   type: string;
   category: string;
   amount: number;
+  date: string;
 }) {
   try {
     return await tablesDB.createRow({
@@ -43,6 +45,7 @@ export async function createTransaction({
         type,
         category,
         amount,
+        transactionDate: date,
       },
     });
   } catch (e) {

@@ -5,4 +5,5 @@ export interface TransactionRow extends Models.Row {
   type: "income" | "expense";
   category: string;
   amount: number;
+  transactionDate: string;
 }

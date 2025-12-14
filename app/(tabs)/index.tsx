@@ -177,7 +177,9 @@ const index = () => {
               <View>
                 <Text className="font-medium">{item.category}</Text>
                 <Text className="text-[#666666] text-sm">
-                  {new Date(item.$createdAt).toLocaleDateString("en-IN", {
+                  {new Date(
+                    item.transactionDate || item.$createdAt
+                  ).toLocaleDateString("en-IN", {
                     year: "numeric",
                     month: "short",
                     day: "2-digit",

@@ -191,6 +191,7 @@ const AddTransaction = () => {
                     type,
                     category,
                     amount: Number(amount),
+                    date: date.toISOString(),
                   });
                   showToast({
                     type: "success",
