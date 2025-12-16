@@ -1,6 +1,7 @@
 import { account } from "@/libs/appwrite";
 import { handleAuthError } from "@/libs/handleAuthError";
 import { makeRedirectUri } from "expo-auth-session";
+import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { ID, OAuthProvider } from "react-native-appwrite";
 
@@ -85,10 +86,13 @@ export async function logInWithOAuth2(provider: OAuthProvider) {
   const userId = url.searchParams.get("userId");
 
   try {
-    return await account.createSession({
+    const user = await account.createSession({
       userId: userId!,
       secret: secret!,
     });
+
+    if (!user) return;
+    router.push("/(tabs)");
   } catch (e) {
     console.error(e);
     return null;

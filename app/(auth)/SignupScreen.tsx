@@ -1,7 +1,12 @@
-import { createUserWithEmailAndPassword } from "@/services/auth.service";
+import showToast from "@/libs/showToast";
+import {
+  createUserWithEmailAndPassword,
+  logInWithOAuth2,
+} from "@/services/auth.service";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Pressable, Text, TextInput, View } from "react-native";
+import { OAuthProvider } from "react-native-appwrite";
 
 const SignupScreen = () => {
   const [emailAddress, setEmailAddress] = useState<string>("");
@@ -97,28 +102,43 @@ const SignupScreen = () => {
           {/* SOCIAL BUTTONS */}
           <View className="flex-row items-center gap-6 mx-auto mt-6">
             {/* GOOGLE */}
-            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+            <Pressable
+              className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]"
+              onPress={() => logInWithOAuth2(OAuthProvider.Google)}
+            >
               <Image
                 source={require("../../assets/icons/google.png")}
                 className="size-8"
               />
-            </View>
+            </Pressable>
 
             {/* FACEBOOK */}
-            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+            <Pressable
+              className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]"
+              onPress={() => logInWithOAuth2(OAuthProvider.Facebook)}
+            >
               <Image
                 source={require("../../assets/icons/facebook.png")}
                 className="size-8"
               />
-            </View>
+            </Pressable>
 
             {/* X (Twitter) */}
-            <View className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+            <Pressable
+              className="size-12 py-4 rounded-xl bg-white shadow-md elevation-lg items-center justify-center transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]"
+              onPress={() =>
+                showToast({
+                  type: "info",
+                  text1: "Not available yet",
+                  text2: "X (Twitter) OAuth will be available soon.",
+                })
+              }
+            >
               <Image
                 source={require("../../assets/icons/twitter-x.png")}
                 className="size-8"
               />
-            </View>
+            </Pressable>
           </View>
 
           {/* LOGIN LINK */}
