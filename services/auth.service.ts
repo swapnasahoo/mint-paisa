@@ -1,7 +1,7 @@
 import { account } from "@/libs/appwrite";
 import { handleAuthError } from "@/libs/handleAuthError";
 import { makeRedirectUri } from "expo-auth-session";
-import * as WebBroswer from "expo-web-browser";
+import * as WebBrowser from "expo-web-browser";
 import { ID, OAuthProvider } from "react-native-appwrite";
 
 interface AppwriteError {
@@ -73,7 +73,7 @@ export async function logInWithOAuth2(provider: OAuthProvider) {
     failure: `${deeplink}`,
   });
 
-  const result = await WebBroswer.openAuthSessionAsync(
+  const result = await WebBrowser.openAuthSessionAsync(
     `${loginUrl}`,
     `${scheme}`
   );
