@@ -1,4 +1,5 @@
 import { account } from "@/libs/appwrite";
+import { formatAmount } from "@/libs/formatAmount";
 import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
@@ -103,7 +104,7 @@ const StatsScreen = () => {
             <View className="mx-auto">
               <Text className="text-center text-xs">Total Cash Flow</Text>
               <Text className="text-center text-sm font-semibold">
-                ₹{totalFlow.toFixed(2)}
+                {formatAmount(totalFlow)}
               </Text>
             </View>
 
@@ -123,14 +124,14 @@ const StatsScreen = () => {
                         <>
                           <Text className="text-center text-sm">Income</Text>
                           <Text className="text-center text-xl font-semibold">
-                            ₹{totalIncome.toFixed(2)}
+                            {formatAmount(totalIncome)}
                           </Text>
                         </>
                       ) : focusedIndex === 1 ? (
                         <>
                           <Text className="text-center text-sm">Expense</Text>
                           <Text className="text-center text-xl font-semibold">
-                            ₹{totalExpense.toFixed(2)}
+                            {formatAmount(totalExpense)}
                           </Text>
                         </>
                       ) : (
@@ -191,7 +192,8 @@ const StatsScreen = () => {
                     : "text-neutral-600"
                 }`}
               >
-                {savings > 0 ? "+" : ""}₹{savings.toFixed(2)}
+                {savings > 0 ? "+" : ""}
+                {formatAmount(totalIncome - totalExpense)}
               </Text>
 
               <Text className="text-sm text-neutral-500">

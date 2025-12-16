@@ -1,5 +1,6 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { account } from "@/libs/appwrite";
+import { formatAmount } from "@/libs/formatAmount";
 import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
@@ -115,7 +116,7 @@ const index = () => {
                   isTotalVisible ? "block" : "hidden"
                 }`}
               >
-                ₹{totalBalance.toFixed(2)}
+                {formatAmount(totalBalance)}
               </Text>
             </View>
 
@@ -131,7 +132,7 @@ const index = () => {
                 </View>
                 {/* INCOME BALANCE */}
                 <Text className="text-xl text-white font-semibold text-right">
-                  {totalIncome.toFixed(2)}
+                  {formatAmount(totalIncome)}
                 </Text>
               </View>
 
@@ -145,7 +146,7 @@ const index = () => {
                 </View>
                 {/* INCOME BALANCE */}
                 <Text className="text-xl text-white font-semibold text-right">
-                  ₹{totalExpense.toFixed(2)}
+                  {formatAmount(totalExpense)}
                 </Text>
               </View>
             </View>
@@ -196,7 +197,9 @@ const index = () => {
                     item.type === "income" ? "text-[#3CB371]" : "text-[#F95B51]"
                   } text-lg font-semibold`}
                 >
-                  {`${item.type === "income" ? "+" : "-"} ₹${item.amount}`}
+                  {`${item.type === "income" ? "+" : "-"} ${formatAmount(
+                    item.amount
+                  )} `}
                 </Text>
               </View>
             </View>
