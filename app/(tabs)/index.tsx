@@ -92,7 +92,7 @@ const index = () => {
           </View>
 
           {/* TRANSACTION SUMMARY CARD */}
-          <View className="w-full h-60 bg-[#2F7E79] z-10 mx-auto top-40 rounded-2xl px-6 py-4 shadow-lg elevation-lg">
+          <View className="w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto top-30 rounded-2xl px-6 py-4 shadow-lg elevation-lg">
             {/* TOTAL BALANCE */}
             <View>
               <Pressable
@@ -154,7 +154,7 @@ const index = () => {
       </View>
 
       {/* TRANSACTION LIST */}
-      <View className="flex-1 mt-[100px] px-6 py-4">
+      <View className="flex-1 mt-[60px] px-6 py-4">
         <Text className="text-lg font-semibold">Transactions history</Text>
 
         <FlatList
@@ -175,7 +175,9 @@ const index = () => {
 
               {/* BRAND / CATEGORY NAME + DATE */}
               <View>
-                <Text className="font-medium">{item.category}</Text>
+                <Text className="font-medium uppercase w-full">
+                  {item.category}
+                </Text>
                 <Text className="text-[#666666] text-sm">
                   {new Date(
                     item.transactionDate || item.$createdAt
