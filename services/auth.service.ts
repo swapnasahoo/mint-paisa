@@ -1,6 +1,8 @@
 import { account } from "@/libs/appwrite";
 import { handleAuthError } from "@/libs/handleAuthError";
-import { ID } from "react-native-appwrite";
+import { makeRedirectUri } from "expo-auth-session";
+import * as WebBroswer from "expo-web-browser";
+import { ID, OAuthProvider } from "react-native-appwrite";
 
 interface AppwriteError {
   message: string;
@@ -56,6 +58,39 @@ export async function logInUserWithEmailAndPassword(
       `[APPWRITE][AUTH][LOGIN]: ERROR MESSAGE: ${error.message}\nERROR TYPE: ${error.type}\nERROR CODE: ${error.code}`
     );
     handleAuthError(error.type);
+    return null;
+  }
+}
+
+/* OAuth2 AUTHENTICATION */
+export async function logInWithOAuth2(provider: OAuthProvider) {
+  const deeplink = new URL(makeRedirectUri({ preferLocalhost: true }));
+  const scheme = `${deeplink.protocol}`;
+
+  const loginUrl = await account.createOAuth2Token({
+    provider,
+    success: `${deeplink}`,
+    failure: `${deeplink}`,
+  });
+
+  const result = await WebBroswer.openAuthSessionAsync(
+    `${loginUrl}`,
+    `${scheme}`
+  );
+
+  if (result.type !== "success") return;
+
+  const url = new URL(result.url);
+  const secret = url.searchParams.get("secret");
+  const userId = url.searchParams.get("userId");
+
+  try {
+    return await account.createSession({
+      userId: userId!,
+      secret: secret!,
+    });
+  } catch (e) {
+    console.error(e);
     return null;
   }
 }
