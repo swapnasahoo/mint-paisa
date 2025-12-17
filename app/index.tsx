@@ -1,6 +1,6 @@
+import { getUser } from "@/services/auth.service";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { getAuthStatus } from "@/services/auth.service";
 
 export default function index() {
   const [user, setUser] = useState<any>(null);
@@ -8,7 +8,7 @@ export default function index() {
 
   useEffect(() => {
     async function loadAuthStatus(): Promise<void> {
-      const user = await getAuthStatus();
+      const user = await getUser();
       setUser(user);
       setLoading(false);
     }
