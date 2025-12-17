@@ -1,6 +1,7 @@
 import { getUser } from "@/services/auth.service";
 import { makeUserAvatar } from "@/services/userProfile.service";
 import { Ionicons } from "@expo/vector-icons";
+import { Href, router } from "expo-router";
 import React, { ComponentProps, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
@@ -11,15 +12,20 @@ type IoniconName = ComponentProps<typeof Ionicons>["name"];
 function ProfileControl({
   iconName,
   label,
+  route,
 }: {
   iconName: IoniconName;
   label: string;
+  route: Href;
 }) {
   return (
-    <View className="flex-row items-center gap-4">
+    <Pressable
+      className="flex-row items-center gap-4"
+      onPress={() => router.push(route)}
+    >
       <Ionicons name={iconName} size={28} color="#666666" />
       <Text className="font-medium">{label}</Text>
-    </View>
+    </Pressable>
   );
 }
 
@@ -85,15 +91,25 @@ const ProfileScreen = () => {
 
           {/* PROFILE CONTROLS */}
           <View className="mt-6 gap-4">
-            <ProfileControl iconName="person" label="Personal Profile" />
-            <ProfileControl iconName="mail" label="Message Center" />
+            <ProfileControl
+              iconName="person"
+              label="Personal Profile"
+              route="/(profile)/AccountProfile"
+            />
+            <ProfileControl
+              iconName="mail"
+              label="Message Center"
+              route="/(profile)/MessageCenter"
+            />
             <ProfileControl
               iconName="shield-half-sharp"
               label="Login and Security"
+              route="/(profile)/LoginSecurity"
             />
             <ProfileControl
               iconName="lock-closed-sharp"
               label="Data & Privacy"
+              route="/(profile)/DataPrivacy"
             />
           </View>
         </View>
