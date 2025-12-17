@@ -98,3 +98,13 @@ export async function logInWithOAuth2(provider: OAuthProvider) {
     return null;
   }
 }
+
+// LOGOUT USER
+export async function logOutUser() {
+  try {
+    return await account.deleteSession({ sessionId: "current" });
+  } catch (e) {
+    console.error("Failed to log out user:", e);
+    return null;
+  }
+}
