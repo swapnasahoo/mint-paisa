@@ -1,4 +1,5 @@
 import { getUser } from "@/services/auth.service";
+import { makeUserAvatar } from "@/services/userProfile.service";
 import { Ionicons } from "@expo/vector-icons";
 import React, { ComponentProps, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -63,8 +64,12 @@ const ProfileScreen = () => {
           <View>
             {/* USER PROFILE IMAGE */}
             <Image
-              source={require("../../assets/images/profile-picture.png")}
-              className="size-40 shadow-xs mx-auto"
+              source={{
+                uri: makeUserAvatar(
+                  user?.name || user?.email.split("@")[0] || ""
+                ),
+              }}
+              className="size-40 shadow-xs mx-auto rounded-full"
             />
 
             {/* DISPLAY NAME */}
