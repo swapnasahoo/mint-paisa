@@ -85,8 +85,7 @@ const ProfileScreen = () => {
 
           {/* PROFILE CONTROLS */}
           <View className="mt-6 gap-4">
-            <ProfileControl iconName="person" label="Account" />
-            <ProfileControl iconName="people" label="Personal Profile" />
+            <ProfileControl iconName="person" label="Personal Profile" />
             <ProfileControl iconName="mail" label="Message Center" />
             <ProfileControl
               iconName="shield-half-sharp"
