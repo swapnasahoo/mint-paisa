@@ -1,5 +1,5 @@
 import showToast from "@/libs/showToast";
-import { logOutUser } from "@/services/auth.service";
+import { logOutAllSessions, logOutUser } from "@/services/auth.service";
 import { updatePassword } from "@/services/userProfile.service";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -155,7 +155,10 @@ const LoginSecurity = () => {
 
                 <View>
                   <View className="border border-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]">
-                    <Text className="text-red-500 font-medium">
+                    <Text
+                      className="text-red-500 font-medium"
+                      onPress={logOutAllSessions}
+                    >
                       Logout from all devices
                     </Text>
                   </View>

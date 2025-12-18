@@ -108,3 +108,12 @@ export async function logOutUser() {
     return null;
   }
 }
+
+export async function logOutAllSessions() {
+  try {
+    return await account.deleteSessions();
+  } catch (e) {
+    console.error("Failed to log out from all sessions:", e);
+    return null;
+  }
+}
