@@ -1,8 +1,11 @@
+import { account } from "@/libs/appwrite";
+import showToast from "@/libs/showToast";
 import { getUser } from "@/services/auth.service";
+import { updateEmail, updateUsername } from "@/services/userProfile.service";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Modal, Pressable, Text, TextInput, View } from "react-native";
+import { Alert, Modal, Pressable, Text, TextInput, View } from "react-native";
 import { Models } from "react-native-appwrite";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -46,6 +49,113 @@ const AccountProfile = () => {
 
     fetchUser();
   }, []);
+
+  function handleNameUpdate() {
+    Alert.alert("Are you sure?", "Do you want to update your name?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Update",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await updateUsername(newName.trim());
+            showToast({
+              type: "success",
+              text1: "Success",
+              text2: "Your name has been updated.",
+            });
+            setName(newName.trim());
+            setIsNewName(false);
+          } catch (e) {
+            console.error("Failed to update username:", e);
+            showToast({
+              type: "error",
+              text1: "Failed",
+              text2: "Failed to update your name. Please try again.",
+            });
+          }
+        },
+      },
+    ]);
+  }
+
+  function handleCityNameUpdate() {
+    Alert.alert("Are you sure?", "Do you want to update your city name?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Update",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await account.updatePrefs({
+              prefs: { cityName: newCityName.trim() },
+            });
+            showToast({
+              type: "success",
+              text1: "Success",
+              text2: "Your city name has been updated.",
+            });
+            setCityName(newCityName.trim());
+            setIsNewCityName(false);
+          } catch (e) {
+            console.error("Failed to update city name:", e);
+            showToast({
+              type: "error",
+              text1: "Failed",
+              text2: "Failed to update your city name. Please try again.",
+            });
+          }
+        },
+      },
+    ]);
+  }
+
+  function handleEmailUpdate() {
+    if (password.trim() === "") {
+      showToast({
+        type: "error",
+        text1: "Failed",
+        text2: "Password is required to update email.",
+      });
+      return;
+    }
+
+    Alert.alert("Are you sure?", "Do you want to update your email?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Update",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await updateEmail(newEmail.trim(), password);
+            showToast({
+              type: "success",
+              text1: "Success",
+              text2: "Your email has been updated.",
+            });
+            setEmail(newEmail.trim());
+            setIsNewEmail(false);
+            setPassword("");
+            setEmailModalVisible(false);
+          } catch (e) {
+            console.error("Failed to update email:", e);
+            showToast({
+              type: "error",
+              text1: "Failed",
+              text2: "Failed to update your email. Please try again.",
+            });
+            setPassword("");
+          }
+        },
+      },
+    ]);
+  }
 
   return (
     <View className="flex-1 bg-[#429690]">
@@ -92,7 +202,7 @@ const AccountProfile = () => {
                       top: 8,
                       display: isNewName ? "flex" : "none",
                     }}
-                    onPress={() => {}}
+                    onPress={handleNameUpdate}
                   />
                 )}
               </View>
@@ -119,7 +229,7 @@ const AccountProfile = () => {
                       right: 10,
                       top: 8,
                     }}
-                    onPress={() => {}}
+                    onPress={handleCityNameUpdate}
                   />
                 )}
               </View>
@@ -182,11 +292,7 @@ const AccountProfile = () => {
                 <Text className="font-medium">Cancel</Text>
               </Pressable>
 
-              <Pressable
-                onPress={() => {
-                  setEmailModalVisible(false);
-                }}
-              >
+              <Pressable onPress={handleEmailUpdate}>
                 <Text className="font-medium text-red-600">Update</Text>
               </Pressable>
             </View>
