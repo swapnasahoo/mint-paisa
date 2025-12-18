@@ -16,7 +16,7 @@ export async function updateUsername(newName: string) {
     });
   } catch (e) {
     console.log("Updating name failed:", e);
-    return null;
+    throw e;
   }
 }
 
@@ -25,7 +25,7 @@ export async function updateEmail(newEmail: string, password: string) {
     return await account.updateEmail({ email: newEmail, password });
   } catch (e) {
     console.log("Updating email failed:", e);
-    return null;
+    throw e;
   }
 }
 
@@ -34,6 +34,6 @@ export async function updatePassword(newPassword: string, oldPassword: string) {
     return await account.updatePassword({ password: newPassword, oldPassword });
   } catch (e) {
     console.log("Updating password failed:", e);
-    return null;
+    throw e;
   }
 }
