@@ -1,10 +1,69 @@
+import showToast from "@/libs/showToast";
+import { logOutUser } from "@/services/auth.service";
+import { updatePassword } from "@/services/userProfile.service";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
-import { Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginSecurity = () => {
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [oldPassword, setOldPassword] = useState<string>("");
+
+  const isOldPasswordValid: boolean =
+    password.trim().length > 0 &&
+    confirmPassword.trim().length > 0 &&
+    oldPassword.trim().length > 0;
+
+  function handlePasswordChange() {
+    Alert.alert(
+      "Change password",
+      "Are you sure you want to change your password?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Change",
+          style: "destructive",
+          onPress: async () => {
+            if (password !== confirmPassword) {
+              showToast({
+                type: "error",
+                text1: "Error",
+                text2: "Password and confirm password do not match.",
+              });
+              return;
+            }
+
+            try {
+              await updatePassword(password, oldPassword);
+              showToast({
+                type: "success",
+                text1: "Success",
+                text2: "Password updated successfully.",
+              });
+              setPassword("");
+              setConfirmPassword("");
+              setOldPassword("");
+            } catch (e) {
+              console.error("Failed to update password:", e);
+              showToast({
+                type: "error",
+                text1: "Failed",
+                text2: "Failed to update password. Please try again.",
+              });
+              return;
+            }
+          },
+        },
+      ]
+    );
+  }
+
   return (
     <View className="flex-1 bg-[#429690]">
       <SafeAreaView className="flex-1">
@@ -32,6 +91,8 @@ const LoginSecurity = () => {
                 <Text className="text-neutral-900">New password</Text>
                 <View className="relative">
                   <TextInput
+                    value={password}
+                    onChangeText={setPassword}
                     placeholder="Your new password"
                     placeholderTextColor="gray"
                     className="w-full border border-gray-300 rounded-lg text-black"
@@ -44,6 +105,8 @@ const LoginSecurity = () => {
                 <Text className="text-neutral-900">Confirm password</Text>
                 <View className="relative">
                   <TextInput
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
                     placeholder="Your new password"
                     placeholderTextColor="gray"
                     className="w-full border border-gray-300 rounded-lg text-black"
@@ -56,31 +119,39 @@ const LoginSecurity = () => {
                 <Text className="text-neutral-900">Old password</Text>
                 <View className="relative">
                   <TextInput
+                    value={oldPassword}
+                    onChangeText={setOldPassword}
                     placeholder="Your new password"
                     placeholderTextColor="gray"
                     className="w-full border border-gray-300 rounded-lg text-black"
                   />
 
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={24}
-                    color="black"
-                    style={{
-                      position: "absolute",
-                      right: 10,
-                      top: 8,
-                    }}
-                  />
+                  {isOldPasswordValid && (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={24}
+                      color="black"
+                      style={{
+                        position: "absolute",
+                        right: 10,
+                        top: 8,
+                      }}
+                      onPress={handlePasswordChange}
+                    />
+                  )}
                 </View>
               </View>
 
               {/* LOGOUT BUTTON */}
               <View className="mt-6 gap-2">
-                <View className="bg-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]">
+                <Pressable
+                  className="bg-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]"
+                  onPress={logOutUser}
+                >
                   <Text className="text-neutral-50 font-medium">
                     Logout from this device
                   </Text>
-                </View>
+                </Pressable>
 
                 <View>
                   <View className="border border-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]">
