@@ -105,7 +105,7 @@ export async function logOutUser() {
     return await account.deleteSession({ sessionId: "current" });
   } catch (e) {
     console.error("Failed to log out user:", e);
-    return null;
+    throw e;
   }
 }
 
@@ -114,6 +114,6 @@ export async function logOutAllSessions() {
     return await account.deleteSessions();
   } catch (e) {
     console.error("Failed to log out from all sessions:", e);
-    return null;
+    throw e;
   }
 }
