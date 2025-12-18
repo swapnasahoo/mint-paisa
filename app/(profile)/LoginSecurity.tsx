@@ -64,6 +64,52 @@ const LoginSecurity = () => {
     );
   }
 
+  function handleLogOutSession() {
+    Alert.alert("Logout", "Are you sure you want to logout from this device?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await logOutUser();
+            router.replace("/(auth)/LoginScreen");
+          } catch (e) {
+            console.error("Failed to log out:", e);
+            showToast({
+              type: "error",
+              text1: "Failed",
+              text2: "Failed to log out. Please try again.",
+            });
+          }
+        },
+      },
+    ]);
+  }
+
+  function handleLogOutAllSessions() {
+    Alert.alert("Logout", "Are you sure you want to logout from all devices?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await logOutAllSessions();
+            router.replace("/(auth)/LoginScreen");
+          } catch (e) {
+            console.error("Failed to log out from all sessions:", e);
+            showToast({
+              type: "error",
+              text1: "Failed",
+              text2: "Failed to log out from all devices. Please try again.",
+            });
+          }
+        },
+      },
+    ]);
+  }
+
   return (
     <View className="flex-1 bg-[#429690]">
       <SafeAreaView className="flex-1">
@@ -146,7 +192,7 @@ const LoginSecurity = () => {
               <View className="mt-6 gap-2">
                 <Pressable
                   className="bg-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]"
-                  onPress={logOutUser}
+                  onPress={handleLogOutSession}
                 >
                   <Text className="text-neutral-50 font-medium">
                     Logout from this device
@@ -157,7 +203,7 @@ const LoginSecurity = () => {
                   <View className="border border-red-500 px-6 py-3 rounded-lg items-center transition-all ease-in-out active:opacity-75 active:scale-[0.98]">
                     <Text
                       className="text-red-500 font-medium"
-                      onPress={logOutAllSessions}
+                      onPress={handleLogOutAllSessions}
                     >
                       Logout from all devices
                     </Text>
