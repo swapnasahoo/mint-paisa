@@ -77,6 +77,36 @@ const AddTransaction = () => {
     loadUserId();
   }, []);
 
+  async function handleAddTransaction() {
+    if (!userId) return;
+    if (!Number(amount.trim())) return alert("Enter an amount");
+
+    try {
+      const transaction = await createTransaction({
+        userId,
+        type,
+        category,
+        amount: Number(amount),
+        date: date.toISOString(),
+      });
+      showToast({
+        type: "success",
+        text1: "Success",
+        text2: "Transaction created succesfully",
+      });
+      setType("income");
+      setCategory("");
+      setAmount("");
+    } catch (error) {
+      console.log("Error creating transaction:", error);
+      showToast({
+        type: "error",
+        text1: "Failed",
+        text2: "Could not create transaction. Please try again.",
+      });
+    }
+  }
+
   return (
     <View className="flex-1 bg-neutral-50">
       <View className="w-full h-[50%] bg-[#429690] px-6 py-4 rounded-b-2xl">
@@ -181,35 +211,7 @@ const AddTransaction = () => {
             {/* CREATE BUTTON */}
             <Pressable
               className="bg-[#69AEA9] px-6 py-2 mt-2 rounded-md shadow-md elevation-sm transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]"
-              onPress={async () => {
-                if (!userId) return;
-                if (!Number(amount.trim())) return alert("Enter an amount");
-
-                try {
-                  const transaction = await createTransaction({
-                    userId,
-                    type,
-                    category,
-                    amount: Number(amount),
-                    date: date.toISOString(),
-                  });
-                  showToast({
-                    type: "success",
-                    text1: "Success",
-                    text2: "Transaction created succesfully",
-                  });
-                  setType("income");
-                  setCategory("");
-                  setAmount("");
-                } catch (error) {
-                  console.log("Error creating transaction:", error);
-                  showToast({
-                    type: "error",
-                    text1: "Failed",
-                    text2: "Could not create transaction. Please try again.",
-                  });
-                }
-              }}
+              onPress={handleAddTransaction}
             >
               <Text className="text-lg text-white font-medium text-center uppercase">
                 Create
