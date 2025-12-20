@@ -38,7 +38,6 @@ const ProfileScreen = () => {
     async function fetchUser() {
       try {
         const userData = await getUser();
-        console.log("User Data:", userData);
         setUser(userData);
       } catch (e) {
         console.error("Failed to fecth user data:", e);
