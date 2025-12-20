@@ -1,19 +1,13 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { account } from "@/libs/appwrite";
-import { formatAmount } from "@/libs/formatAmount";
 import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StatusBar,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import TransactionCard from "../components/TransactionCard";
+import TransactionSummaryCard from "../components/TransactionSummaryCard";
 
 const index = () => {
   StatusBar.setBarStyle("light-content");
@@ -93,64 +87,13 @@ const index = () => {
           </View>
 
           {/* TRANSACTION SUMMARY CARD */}
-          <View className="w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto top-30 rounded-2xl px-6 py-4 shadow-lg elevation-lg">
-            {/* TOTAL BALANCE */}
-            <View>
-              <Pressable
-                className="flex-row items-center gap-2"
-                onPress={() => setIsTotalVisible(!isTotalVisible)}
-              >
-                <Text className="text-white text-lg font-semibold">
-                  Total Balance
-                </Text>
-                <Ionicons
-                  name={isTotalVisible ? "chevron-up" : "chevron-down"}
-                  size={24}
-                  color="white"
-                />
-              </Pressable>
-
-              {/* BALANCE */}
-              <Text
-                className={`text-white text-3xl font-bold ${
-                  isTotalVisible ? "block" : "hidden"
-                }`}
-              >
-                {formatAmount(totalBalance)}
-              </Text>
-            </View>
-
-            {/* INCOME + EXPENSE SUMMARY */}
-            <View className="flex-row items-center justify-between mt-auto">
-              {/* INCOME */}
-              <View>
-                <View className="flex-row items-center gap-2">
-                  <View className="bg-white/15 p-1 rounded-full">
-                    <Ionicons name="arrow-down" size={18} color="white" />
-                  </View>
-                  <Text className="text-[#D0E5E4] font-medium">Income</Text>
-                </View>
-                {/* INCOME BALANCE */}
-                <Text className="text-xl text-white font-semibold text-right">
-                  {formatAmount(totalIncome)}
-                </Text>
-              </View>
-
-              {/* EXPENSE */}
-              <View>
-                <View className="flex-row items-center gap-2">
-                  <View className="bg-white/15 p-1 rounded-full">
-                    <Ionicons name="arrow-up" size={18} color="white" />
-                  </View>
-                  <Text className="text-[#D0E5E4] font-medium">Expense</Text>
-                </View>
-                {/* INCOME BALANCE */}
-                <Text className="text-xl text-white font-semibold text-right">
-                  {formatAmount(totalExpense)}
-                </Text>
-              </View>
-            </View>
-          </View>
+          <TransactionSummaryCard
+            totalBalance={totalBalance}
+            totalIncome={totalIncome}
+            totalExpense={totalExpense}
+            isTotalVisible={isTotalVisible}
+            setIsTotalVisible={setIsTotalVisible}
+          />
         </SafeAreaView>
       </View>
 
@@ -166,44 +109,7 @@ const index = () => {
           contentContainerStyle={{ paddingHorizontal: 2 }}
           renderItem={({ item }) => (
             /* TRANSACTION CARD */
-            <View className="flex-row items-center gap-3 mt-2 mb-2 bg-neutral-50 px-4 py-3 shadow-sm elevation-sm rounded-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
-              {/* LOGO / CATEGORY ICON */}
-              <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
-                <Image
-                  source={require("../../assets/icons/category-icons/youtube-premium.png")}
-                  className="size-8"
-                />
-              </View>
-
-              {/* BRAND / CATEGORY NAME + DATE */}
-              <View>
-                <Text className="font-medium uppercase w-full">
-                  {item.category}
-                </Text>
-                <Text className="text-[#666666] text-sm">
-                  {new Date(
-                    item.transactionDate || item.$createdAt
-                  ).toLocaleDateString("en-IN", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                  })}
-                </Text>
-              </View>
-
-              {/* TRANSACTION AMOUNT */}
-              <View className="ml-auto">
-                <Text
-                  className={`${
-                    item.type === "income" ? "text-[#3CB371]" : "text-[#F95B51]"
-                  } text-lg font-semibold`}
-                >
-                  {`${item.type === "income" ? "+" : "-"} ${formatAmount(
-                    item.amount
-                  )} `}
-                </Text>
-              </View>
-            </View>
+            <TransactionCard data={item} />
           )}
         />
       </View>
