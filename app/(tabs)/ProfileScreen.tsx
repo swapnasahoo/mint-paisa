@@ -20,10 +20,19 @@ function ProfileControl({
 }) {
   return (
     <Pressable
-      className="flex-row items-center gap-4"
+      className="flex-row items-center gap-4 bg-neutral-50 px-6 py-2 shadow-sm elevation-sm rounded-lg transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]"
       onPress={() => router.push(route)}
     >
-      <Ionicons name={iconName} size={28} color="#666666" />
+      <Ionicons
+        name={iconName}
+        size={28}
+        color="#429690"
+        style={{
+          backgroundColor: "#D3F1F0",
+          borderRadius: 8,
+          padding: 4,
+        }}
+      />
       <Text className="font-medium">{label}</Text>
     </Pressable>
   );
