@@ -9,6 +9,7 @@ interface TransactionSummaryCardProps {
   totalExpense: number;
   isTotalVisible: boolean;
   setIsTotalVisible: (isTotalVisible: boolean) => void;
+  topValue?: number;
 }
 
 const TransactionSummaryCard = ({
@@ -17,9 +18,12 @@ const TransactionSummaryCard = ({
   totalExpense,
   isTotalVisible,
   setIsTotalVisible,
+  topValue,
 }: TransactionSummaryCardProps) => {
   return (
-    <View className="w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto top-30 rounded-2xl px-6 py-4 shadow-lg elevation-lg">
+    <View
+      className={`w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto top-${topValue} rounded-2xl px-6 py-4 shadow-lg elevation-lg`}
+    >
       {/* TOTAL BALANCE */}
       <View>
         <Pressable

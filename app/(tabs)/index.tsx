@@ -93,6 +93,7 @@ const index = () => {
             totalExpense={totalExpense}
             isTotalVisible={isTotalVisible}
             setIsTotalVisible={setIsTotalVisible}
+            topValue={30}
           />
         </SafeAreaView>
       </View>
