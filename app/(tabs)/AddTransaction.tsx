@@ -1,3 +1,8 @@
+import {
+  expenseCategoryDropdownList,
+  incomeCategoryDropdownList,
+  typeDropdownList,
+} from "@/constants/data/transactionCategory";
 import { account } from "@/libs/appwrite";
 import showToast from "@/libs/showToast";
 import { createTransaction } from "@/services/transaction.service";
@@ -15,11 +20,6 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface DropdownItems {
-  label: string;
-  value: string;
-}
-
 const AddTransaction = () => {
   StatusBar.setBarStyle("light-content");
 
@@ -30,40 +30,6 @@ const AddTransaction = () => {
   const [userId, setUserId] = useState<string>("");
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-
-  const typeDropdownList: DropdownItems[] = [
-    { label: "Income", value: "income" },
-    { label: "Expense", value: "expense" },
-  ];
-
-  const incomeCategoryDropdownList: DropdownItems[] = [
-    { label: "Salary", value: "salary" },
-    { label: "Freelance", value: "freelance" },
-    { label: "Rent", value: "rent" },
-    { label: "Stock Gains", value: "stockGains" },
-    { label: "Crypto Gains", value: "cryptoGains" },
-    { label: "Gifts", value: "gifts" },
-    { label: "Refund", value: "refund" },
-    { label: "Cashback", value: "cashback" },
-    { label: "Others", value: "others" },
-  ];
-
-  const expenseCategoryDropdownList: DropdownItems[] = [
-    { label: "Ecommerce", value: "ecommerce" },
-    { label: "Clothes", value: "clothes" },
-    { label: "Food", value: "food" },
-    { label: "Travel", value: "travel" },
-    { label: "Transport", value: "transport" },
-    { label: "Fuel", value: "fuel" },
-    { label: "Entertainment", value: "entertainment" },
-    { label: "Electricity", value: "electricity" },
-    { label: "YouTube Premium", value: "youtubePremium" },
-    { label: "Spotify Premium", value: "spotifyPremium" },
-    { label: "LinkedIn Premium", value: "linkedinPremium" },
-    { label: "JioHotstar Premium", value: "jioHotstarPremium" },
-    { label: "Netflix Subscription", value: "netflixSubscription" },
-    { label: "Others", value: "others" },
-  ];
 
   useEffect(() => {
     setCategory("");
