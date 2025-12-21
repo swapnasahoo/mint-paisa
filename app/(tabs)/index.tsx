@@ -1,6 +1,8 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { account } from "@/libs/appwrite";
 import { fetchTransactions } from "@/services/transaction.service";
+import { makeUserAvatar } from "@/services/userProfile.service";
+import { useAvatar } from "@/store/useAvatar";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -28,11 +30,18 @@ const index = () => {
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [totalExpense, setTotalExpense] = useState<number>(0);
 
-  // FETCH USER ID
+  const avatarUrl = useAvatar((s) => s.avatarUrl);
+  const setAvatarUrl = useAvatar((s) => s.setAvatarUrl);
+
+  // FETCH USER ID AND MAKE AVATAR
   useEffect(() => {
     async function fetchUserId() {
       const user = await account.get();
       setUserId(user.$id);
+
+      // make avatar url
+      const avatarApiUrl = makeUserAvatar(user.name || user.email);
+      setAvatarUrl(avatarApiUrl);
     }
 
     fetchUserId();

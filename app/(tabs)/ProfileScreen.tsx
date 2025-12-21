@@ -1,5 +1,5 @@
 import { getUser } from "@/services/auth.service";
-import { makeUserAvatar } from "@/services/userProfile.service";
+import { useAvatar } from "@/store/useAvatar";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import React, { ComponentProps, useEffect, useState } from "react";
@@ -42,6 +42,7 @@ const ProfileScreen = () => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
     null
   );
+  const avatarUrl = useAvatar((s) => s.avatarUrl);
 
   useEffect(() => {
     async function fetchUser() {
@@ -79,9 +80,7 @@ const ProfileScreen = () => {
             {/* USER PROFILE IMAGE */}
             <Image
               source={{
-                uri: makeUserAvatar(
-                  user?.name || user?.email.split("@")[0] || ""
-                ),
+                uri: avatarUrl,
               }}
               className="size-40 shadow-xs mx-auto rounded-full"
             />
