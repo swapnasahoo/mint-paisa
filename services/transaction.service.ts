@@ -14,7 +14,10 @@ export async function fetchTransactions(
     return await tablesDB.listRows({
       databaseId: TRANSACTIONS_DATABASE_ID,
       tableId: TRANSACTIONS_ENTRIES_TABLE_ID,
-      queries: [Query.orderDesc("$createdAt"), Query.equal("userId", userId)],
+      queries: [
+        Query.orderDesc("transactionDate"),
+        Query.equal("userId", userId),
+      ],
     });
   } catch (e) {
     console.error(e);
