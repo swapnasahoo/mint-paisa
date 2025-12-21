@@ -1,6 +1,7 @@
 import showToast from "@/libs/showToast";
 import {
   createUserWithEmailAndPassword,
+  logInUserWithEmailAndPassword,
   logInWithOAuth2,
 } from "@/services/auth.service";
 import { Link, router } from "expo-router";
@@ -29,7 +30,8 @@ const SignupScreen = () => {
     const user = await createUserWithEmailAndPassword(emailAddress, password);
 
     if (user) {
-      router.replace("/(tabs)");
+      const user = await logInUserWithEmailAndPassword(emailAddress, password);
+      if (user) router.replace("/(tabs)");
     }
   }
 
