@@ -4,7 +4,14 @@ import { fetchTransactions } from "@/services/transaction.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, StatusBar, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TransactionCard from "../components/TransactionCard";
 import TransactionSummaryCard from "../components/TransactionSummaryCard";
@@ -13,6 +20,8 @@ const index = () => {
   StatusBar.setBarStyle("light-content");
 
   const [isTotalVisible, setIsTotalVisible] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [userId, setUserId] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<TransactionRow[]>([]);
   const [totalBalance, setTotalBalance] = useState<number>(0);
@@ -57,6 +66,7 @@ const index = () => {
         setTotalBalance(balance || 0);
         setTotalIncome(income || 0);
         setTotalExpense(expense || 0);
+        setIsLoading(false);
       }
       isActive && fetchUserTransactions();
 
@@ -87,33 +97,48 @@ const index = () => {
           </View>
 
           {/* TRANSACTION SUMMARY CARD */}
-          <TransactionSummaryCard
-            totalBalance={totalBalance}
-            totalIncome={totalIncome}
-            totalExpense={totalExpense}
-            isTotalVisible={isTotalVisible}
-            setIsTotalVisible={setIsTotalVisible}
-            topValue={30}
-          />
+          {isLoading ? (
+            <View className="flex-1 justify-center items-center mt-30">
+              <ActivityIndicator size="large" color="white" />
+            </View>
+          ) : (
+            <TransactionSummaryCard
+              totalBalance={totalBalance}
+              totalIncome={totalIncome}
+              totalExpense={totalExpense}
+              isTotalVisible={isTotalVisible}
+              setIsTotalVisible={setIsTotalVisible}
+              topValue={30}
+            />
+          )}
         </SafeAreaView>
       </View>
 
       {/* TRANSACTION LIST */}
-      <View className="flex-1 mt-[60px] px-6 py-4">
-        <Text className="text-lg font-semibold">Transactions history</Text>
+      {isLoading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#429690" />
+          <Text className="mt-1 text-sm text-teal-800 font-medium">
+            Loading transations...
+          </Text>
+        </View>
+      ) : (
+        <View className="flex-1 mt-[60px] px-6 py-4">
+          <Text className="text-lg font-semibold">Transactions history</Text>
 
-        <FlatList
-          data={transactions}
-          keyExtractor={(item) => item.$id}
-          showsVerticalScrollIndicator={false}
-          className="mt-4"
-          contentContainerStyle={{ paddingHorizontal: 2 }}
-          renderItem={({ item }) => (
-            /* TRANSACTION CARD */
-            <TransactionCard data={item} />
-          )}
-        />
-      </View>
+          <FlatList
+            data={transactions}
+            keyExtractor={(item) => item.$id}
+            showsVerticalScrollIndicator={false}
+            className="mt-4"
+            contentContainerStyle={{ paddingHorizontal: 2 }}
+            renderItem={({ item }) => (
+              /* TRANSACTION CARD */
+              <TransactionCard data={item} />
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 };
