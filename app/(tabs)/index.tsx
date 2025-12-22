@@ -33,15 +33,26 @@ const index = () => {
   const avatarUrl = useUser((s) => s.avatarUrl);
   const setAvatarUrl = useUser((s) => s.setAvatarUrl);
 
-  // FETCH USER ID AND MAKE AVATAR
+  const name = useUser((s) => s.name);
+  const setName = useUser((s) => s.setName);
+
+  const email = useUser((s) => s.email);
+  const setEmail = useUser((s) => s.setEmail);
+
+  const cityName = useUser((s) => s.cityName);
+  const setCityName = useUser((s) => s.setCityName);
+
+  // FETCH USER
   useEffect(() => {
     async function fetchUserId() {
       const user = await account.get();
       setUserId(user.$id);
 
-      // make avatar url
-      const avatarApiUrl = makeUserAvatar(user.name || user.email);
-      setAvatarUrl(avatarApiUrl);
+      // set user data in zustand store
+      setName(user.name);
+      setEmail(user.email);
+      setCityName(user.prefs.cityName || null);
+      setAvatarUrl(makeUserAvatar(user.name || user.email || ""));
     }
 
     fetchUserId();
