@@ -6,7 +6,7 @@ type TransactionType = {
   isLoading: boolean;
   setTransactions: (transactions: TransactionRow[]) => void;
   setIsLoading: (isLoading: boolean) => void;
-  addTransaction: (transaction: TransactionRow) => void;
+  addTransaction?: (transaction: TransactionRow) => void;
 };
 
 export const useTransactions = create<TransactionType>((set) => ({
@@ -15,7 +15,13 @@ export const useTransactions = create<TransactionType>((set) => ({
   setTransactions: (transactions) => set({ transactions: transactions }),
   setIsLoading: (isLoading) => set({ isLoading }),
   addTransaction: (transaction) =>
-    set((s) => ({
-      transactions: [...s.transactions, transaction],
-    })),
+    set((s) => {
+      const sortedTransactions = [...s.transactions, transaction].sort(
+        (a, b) =>
+          new Date(b.transactionDate).getTime() -
+          new Date(a.transactionDate).getTime()
+      );
+
+      return { transactions: sortedTransactions };
+    }),
 }));

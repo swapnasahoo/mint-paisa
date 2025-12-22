@@ -90,7 +90,7 @@ const index = () => {
     }
 
     fetchUserTransactions();
-  }, [userId, transactions]);
+  }, [userId]);
 
   return (
     <View className="flex-1 bg-neutral-50">
