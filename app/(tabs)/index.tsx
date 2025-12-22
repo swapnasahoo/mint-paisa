@@ -104,7 +104,7 @@ const index = () => {
             <View>
               <Text className="text-white text-sm ">Good afternoon!</Text>
               <Text className="text-white font-semibold text-xl">
-                SwapnaSahoo
+                {name || email.split("@")[0]}
               </Text>
             </View>
 
