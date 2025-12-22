@@ -1,5 +1,5 @@
 import { getUser } from "@/services/auth.service";
-import { useAvatar } from "@/store/useAvatar";
+import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import React, { ComponentProps, useEffect, useState } from "react";
@@ -42,7 +42,7 @@ const ProfileScreen = () => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
     null
   );
-  const avatarUrl = useAvatar((s) => s.avatarUrl);
+  const avatarUrl = useUser((s) => s.avatarUrl);
 
   useEffect(() => {
     async function fetchUser() {
