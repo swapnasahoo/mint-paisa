@@ -1,9 +1,7 @@
-import { account } from "@/libs/appwrite";
 import { formatAmount } from "@/libs/formatAmount";
-import { fetchTransactions } from "@/services/transaction.service";
+import { useTransactions } from "@/store/useTransaction";
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar, Text, View } from "react-native";
 import { PieChart, pieDataItem } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,7 +9,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const StatsScreen = () => {
   StatusBar.setBarStyle("light-content");
 
-  const [userId, setUserId] = useState<string>("");
+  // useTransactions store
+  const transactions = useTransactions((s) => s.transactions);
+
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [totalExpense, setTotalExpense] = useState<number>(0);
@@ -35,52 +35,27 @@ const StatsScreen = () => {
     },
   ];
 
-  // LOAD USER ID
-  useEffect(() => {
-    async function loadUserId() {
-      const user = await account.get();
-      setUserId(user.$id);
-    }
-    loadUserId();
-  }, []);
-
   // FETCH BALANCES
-  useFocusEffect(
-    useCallback(() => {
-      let isActive: boolean = true;
-      async function fetchBalances() {
-        if (!userId) return;
+  useEffect(() => {
+    const balance = transactions.reduce((acc, transaction) => {
+      return acc + transaction.amount;
+    }, 0);
 
-        const transaction = await fetchTransactions(userId);
+    const income = transactions.reduce((acc, transaction) => {
+      return transaction.type === "income" ? acc + transaction.amount : acc;
+    }, 0);
 
-        const balance = transaction?.rows.reduce((acc, transaction) => {
-          return acc + transaction.amount;
-        }, 0);
+    const expense = transactions.reduce((acc, transaction) => {
+      return transaction.type === "expense" ? acc + transaction.amount : acc;
+    }, 0);
 
-        const income = transaction?.rows.reduce((acc, transaction) => {
-          return transaction.type === "income" ? acc + transaction.amount : acc;
-        }, 0);
+    const flow = (income || 0) + (expense || 0);
 
-        const expense = transaction?.rows.reduce((acc, transaction) => {
-          return transaction.type === "expense"
-            ? acc + transaction.amount
-            : acc;
-        }, 0);
-
-        const flow = (income || 0) + (expense || 0);
-
-        setTotalIncome(income || 0);
-        setTotalExpense(expense || 0);
-        setTotalBalance(balance || 0);
-        setTotalFlow(flow || 0);
-      }
-      isActive && fetchBalances();
-
-      return () => {
-        isActive = false;
-      };
-    }, [userId])
-  );
+    setTotalIncome(income || 0);
+    setTotalExpense(expense || 0);
+    setTotalBalance(balance || 0);
+    setTotalFlow(flow || 0);
+  }, [transactions]);
 
   return (
     <View className="flex-1 bg-[#429690]">

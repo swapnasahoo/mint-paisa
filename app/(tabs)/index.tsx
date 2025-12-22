@@ -1,7 +1,7 @@
-import { TransactionRow } from "@/interfaces/TransactionRow";
 import { account } from "@/libs/appwrite";
 import { fetchTransactions } from "@/services/transaction.service";
 import { makeUserAvatar } from "@/services/userProfile.service";
+import { useTransactions } from "@/store/useTransaction";
 import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
@@ -22,10 +22,15 @@ const index = () => {
   StatusBar.setBarStyle("light-content");
 
   const [isTotalVisible, setIsTotalVisible] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [transactions, setTransactions] = useState<TransactionRow[]>([]);
+
+  const transactions = useTransactions((s) => s.transactions);
+  const setTransactions = useTransactions((s) => s.setTransactions);
+
+  const isLoading = useTransactions((s) => s.isLoading);
+  const setIsLoading = useTransactions((s) => s.setIsLoading);
+
   const [totalBalance, setTotalBalance] = useState<number>(0);
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [totalExpense, setTotalExpense] = useState<number>(0);
