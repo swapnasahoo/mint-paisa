@@ -6,6 +6,7 @@ import {
 import { account } from "@/libs/appwrite";
 import showToast from "@/libs/showToast";
 import { createTransaction } from "@/services/transaction.service";
+import { useTransactions } from "@/store/useTransaction";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
@@ -22,6 +23,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const AddTransaction = () => {
   StatusBar.setBarStyle("light-content");
+
+  const addTransaction = useTransactions((s) => s.addTransaction);
 
   const [type, setType] = useState<"income" | "expense">("income");
   const [category, setCategory] = useState<string>("");
@@ -55,6 +58,10 @@ const AddTransaction = () => {
         amount: Number(amount),
         date: date.toISOString(),
       });
+
+      // update transaction list in zustand store
+      addTransaction(transaction as any);
+
       showToast({
         type: "success",
         text1: "Success",
