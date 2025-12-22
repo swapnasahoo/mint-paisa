@@ -1,10 +1,8 @@
-import { getUser } from "@/services/auth.service";
 import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
-import React, { ComponentProps, useEffect, useState } from "react";
+import React, { ComponentProps } from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { Models } from "react-native-appwrite";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
@@ -39,23 +37,9 @@ function ProfileControl({
 }
 
 const ProfileScreen = () => {
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
-    null
-  );
   const avatarUrl = useUser((s) => s.avatarUrl);
-
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const userData = await getUser();
-        setUser(userData);
-      } catch (e) {
-        console.error("Failed to fecth user data:", e);
-      }
-    }
-
-    fetchUser();
-  }, []);
+  const name = useUser((s) => s.name);
+  const email = useUser((s) => s.email);
 
   return (
     <View className="flex-1 bg-[#429690]">
@@ -87,12 +71,12 @@ const ProfileScreen = () => {
 
             {/* DISPLAY NAME */}
             <Text className="text-[#222222] text-xl font-semibold text-center mt-4 capitalize">
-              {user?.name || user?.email.split("@")[0]}
+              {name || email.split("@")[0]}
             </Text>
 
             {/* USER EMAIL */}
             <Text className="text-[#438883] text-sm font-semibold text-center mt-1">
-              {user?.email}
+              {email}
             </Text>
           </View>
 

@@ -1,7 +1,11 @@
 import { account } from "@/libs/appwrite";
 import showToast from "@/libs/showToast";
-import { getUser } from "@/services/auth.service";
-import { updateEmail, updateUsername } from "@/services/userProfile.service";
+import {
+  makeUserAvatar,
+  updateEmail,
+  updateUsername,
+} from "@/services/userProfile.service";
+import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -13,9 +17,17 @@ const AccountProfile = () => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
     null
   );
-  const [name, setName] = useState<string>("");
-  const [cityName, setCityName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const name = useUser((s) => s.name);
+  const setName = useUser((s) => s.setName);
+
+  const email = useUser((s) => s.email);
+  const setEmail = useUser((s) => s.setEmail);
+
+  const cityName = useUser((s) => s.cityName);
+  const setCityName = useUser((s) => s.setCityName);
+
+  const setAvatarUrl = useUser((s) => s.setAvatarUrl);
+
   const [password, setPassword] = useState<string>("");
 
   const [newName, setNewName] = useState<string>("");
@@ -29,26 +41,13 @@ const AccountProfile = () => {
   const [emailModalVisible, setEmailModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const userData = await getUser();
-        setUser(userData);
+    setNewName(name || "");
+    setNewEmail(email || "");
+    setNewCityName(cityName || "");
 
-        setName(userData?.name || "");
-        setNewName(userData?.name || "");
-
-        setCityName(userData?.prefs?.cityName || "");
-        setNewCityName(userData?.prefs?.cityName || "");
-
-        setEmail(userData?.email || "");
-        setNewEmail(userData?.email || "");
-      } catch (e) {
-        console.error("Failed to fecth user data:", e);
-      }
-    }
-
-    fetchUser();
-  }, []);
+    // update avatar if name / email changes
+    setAvatarUrl(makeUserAvatar(name || email || ""));
+  }, [name, email, cityName]);
 
   function handleNameUpdate() {
     Alert.alert("Are you sure?", "Do you want to update your name?", [
