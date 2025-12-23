@@ -34,7 +34,6 @@ const index = () => {
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [totalExpense, setTotalExpense] = useState<number>(0);
 
-  const avatarUrl = useUser((s) => s.avatarUrl);
   const setAvatarUrl = useUser((s) => s.setAvatarUrl);
 
   const name = useUser((s) => s.name);
@@ -42,7 +41,6 @@ const index = () => {
 
   const email = useUser((s) => s.email);
   const setEmail = useUser((s) => s.setEmail);
-
   const cityName = useUser((s) => s.cityName);
   const setCityName = useUser((s) => s.setCityName);
 
