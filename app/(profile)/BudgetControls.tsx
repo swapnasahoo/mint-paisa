@@ -1,52 +1,37 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import React from "react";
-import { Modal, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";``
+import { Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MessageCenter = () => {
   return (
-    <View className="flex-1 bg-[#429690]">
+    <View className="flex-1 bg-[#429690] px-6 py-4">
       <SafeAreaView className="flex-1">
-        <Modal visible transparent animationType="fade">
-          {/* Backdrop */}
-          <Pressable
-            className="flex-1 bg-black/40 items-center justify-center"
-            onPress={() => router.back()}
-          >
-            {/* Card */}
-            <Pressable
-              className="w-80 bg-neutral-50 rounded-2xl px-6 py-6 items-center shadow-lg"
-              onPress={() => {}}
-            >
-              {/* Icon */}
-              <View className="bg-neutral-100 p-4 rounded-full mb-4">
-                <Ionicons name="lock-closed-outline" size={28} color="#111" />
-              </View>
+        {/* CONTENT */}
+        <View className="w-full h-full items-center justify-center">
+          {/* ILLUSTRATION */}
+          <Image
+            source={require("../../assets/images/illustrations/budget-controls-welcome.png")}
+            className="size-100"
+          />
 
-              {/* Title */}
-              <Text className="text-lg font-semibold text-neutral-900 mb-1">
-                Coming Soon
-              </Text>
+          {/* HEADING */}
+          <Text className="text-2xl text-white font-semibold">
+            Start now or Regret
+          </Text>
 
-              {/* Subtitle */}
-              <Text className="text-center text-sm text-neutral-500 mb-6">
-                Budget Controls isn’t available yet. We’re still wiring things
-                up behind the scenes.
-              </Text>
+          {/* SUBHEADING */}
+          <Text className="text-center text-sm text-neutral-200 mt-2">
+            Looks like you haven't set up your expense limits yet! Set them now
+            and make your future safe and secure.
+          </Text>
 
-              {/* Action */}
-              <Pressable
-                className="w-full bg-neutral-900 py-3 rounded-xl transition-all ease-in-out active:scale-[0.98] active:opacity-75"
-                onPress={() => router.back()}
-              >
-                <Text className="text-center text-white font-medium">
-                  Got it
-                </Text>
-              </Pressable>
-            </Pressable>
+          {/* START BUTTIN */}
+          <Pressable className="mt-6 bg-neutral-50 w-full px-6 py-3 rounded-full transition-all ease-in-out active:opacity-85 active:scale-[0.98] shadow-sm elevation-xs">
+            <Text className="text-neutral-950 text-lg font-semibold text-center">
+              Start savings
+            </Text>
           </Pressable>
-        </Modal>
+        </View>
       </SafeAreaView>
     </View>
   );
