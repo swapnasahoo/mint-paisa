@@ -88,9 +88,9 @@ const ProfileScreen = () => {
               route="/(profile)/AccountProfile"
             />
             <ProfileControl
-              iconName="mail"
-              label="Message Center"
-              route="/(profile)/MessageCenter"
+              iconName="wallet-sharp"
+              label="Budget Controls"
+              route="/(profile)/BudgetControls"
             />
             <ProfileControl
               iconName="shield-half-sharp"

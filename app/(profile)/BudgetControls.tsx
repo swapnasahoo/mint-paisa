@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Modal, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";``
 
 const MessageCenter = () => {
   return (
@@ -31,8 +31,8 @@ const MessageCenter = () => {
 
               {/* Subtitle */}
               <Text className="text-center text-sm text-neutral-500 mb-6">
-                Message Center isn’t available yet. We’re still wiring things up
-                behind the scenes.
+                Budget Controls isn’t available yet. We’re still wiring things
+                up behind the scenes.
               </Text>
 
               {/* Action */}
