@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 type ScreenNameType = "welcome" | "setBudget" | "overview" | null;
 
 const MessageCenter = () => {
-  const [screenName, setScreenName] = useState<ScreenNameType>("setBudget");
+  const [screenName, setScreenName] = useState<ScreenNameType>("welcome");
 
   const [budget, setBudget] = useState<string>("");
 
@@ -80,7 +80,13 @@ const MessageCenter = () => {
               {/* SET BUDGET BUTTON */}
               <Pressable
                 className="mt-6 bg-neutral-50 w-full px-6 py-3 rounded-full transition-all ease-in-out active:opacity-85 active:scale-[0.98] shadow-sm elevation-xs"
-                onPress={() => setScreenName("overview")}
+                onPress={() => {
+                  if (budget === "0") {
+                    alert("Please enter a valid budget amount.");
+                    return;
+                  }
+                  setScreenName("overview");
+                }}
               >
                 <Text className="text-neutral-950 text-lg font-semibold text-center">
                   Set Budget
