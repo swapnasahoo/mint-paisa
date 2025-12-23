@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type ScreenNameType = "welcome" | "setBudget" | "overview" | null;
 
 const MessageCenter = () => {
-  const [screenName, setScreenName] = useState<ScreenNameType>("welcome");
+  const [screenName, setScreenName] = useState<ScreenNameType>("setBudget");
+
+  const [budget, setBudget] = useState<string>("");
 
   return (
     <View className="flex-1 bg-[#429690] px-6 py-4">
@@ -40,6 +50,44 @@ const MessageCenter = () => {
               </Text>
             </Pressable>
           </View>
+        )}
+
+        {/* SET BUDGET SCREEN */}
+        {screenName === "setBudget" && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <View className="w-full h-full items-center justify-center">
+              {/* ILLUSTRATION */}
+              <Image
+                source={require("../../assets/images/illustrations/set-budget.png")}
+                className="size-80"
+              />
+
+              {/* BUDGET TEXT INPUT */}
+              <TextInput
+                value={budget}
+                onChangeText={(text) => {
+                  const replaced: string = text.replace(/[^0-9]/g, "");
+                  setBudget(replaced);
+                }}
+                placeholder="0"
+                keyboardType="numeric"
+                placeholderTextColor="#fafafa"
+                className="text-4xl text-neutral-50 font-medium mt-6 border-b border-neutral-200 caret-neutral-200"
+              />
+
+              {/* SET BUDGET BUTTON */}
+              <Pressable
+                className="mt-6 bg-neutral-50 w-full px-6 py-3 rounded-full transition-all ease-in-out active:opacity-85 active:scale-[0.98] shadow-sm elevation-xs"
+                onPress={() => setScreenName("overview")}
+              >
+                <Text className="text-neutral-950 text-lg font-semibold text-center">
+                  Set Budget
+                </Text>
+              </Pressable>
+            </View>
+          </KeyboardAvoidingView>
         )}
       </SafeAreaView>
     </View>
