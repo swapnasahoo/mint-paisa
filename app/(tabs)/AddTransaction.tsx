@@ -6,11 +6,13 @@ import {
 import { account } from "@/libs/appwrite";
 import showToast from "@/libs/showToast";
 import { createTransaction } from "@/services/transaction.service";
+import { useBudget } from "@/store/useBudget";
 import { useTransactions } from "@/store/useTransaction";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
 import {
+  Alert,
   Pressable,
   StatusBar,
   StyleSheet,
@@ -32,6 +34,11 @@ const AddTransaction = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [userId, setUserId] = useState<string>("");
 
+  const budget = useBudget((s) => s.budget);
+  const [totalExpnese, setTotalExpense] = useState<number>(0);
+
+  const transactions = useTransactions((s) => s.transactions);
+
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,9 +53,44 @@ const AddTransaction = () => {
     loadUserId();
   }, []);
 
-  async function handleAddTransaction() {
+  useEffect(() => {
+    const expense = transactions.reduce((acc, transaction) => {
+      return transaction.type === "expense" ? acc + transaction.amount : acc;
+    }, 0);
+
+    setTotalExpense(expense);
+  }, [transactions]);
+
+  function handleBudgetExceeded() {
+    Alert.alert(
+      "Budget exceeded",
+      "Adding this expense will exceed your set budget.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Add anyway",
+          onPress: () => {
+            handleAddTransaction(true);
+          },
+        },
+      ]
+    );
+  }
+
+  async function handleAddTransaction(overrideBudget?: boolean) {
     if (!userId) return;
     if (!Number(amount.trim())) return alert("Enter an amount");
+
+    // handle budget exceed alert
+    if (!overrideBudget) {
+      if (type === "expense" && Number(budget) > 0) {
+        if (totalExpnese + Number(amount) > Number(budget))
+          return handleBudgetExceeded();
+      }
+    }
 
     try {
       const transaction = await createTransaction({
@@ -184,7 +226,7 @@ const AddTransaction = () => {
             {/* CREATE BUTTON */}
             <Pressable
               className="bg-[#69AEA9] px-6 py-2 mt-2 rounded-md shadow-md elevation-sm transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]"
-              onPress={handleAddTransaction}
+              onPress={() => handleAddTransaction()}
             >
               <Text className="text-lg text-white font-medium text-center uppercase">
                 Create
