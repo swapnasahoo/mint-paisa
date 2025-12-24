@@ -3,14 +3,26 @@ import { create } from "zustand";
 
 type TransactionType = {
   transactions: TransactionRow[];
+  totalIncome: number;
+  totalExpense: number;
+  totalBalance: number;
+  totalFlow: number;
   isLoading: boolean;
   setTransactions: (transactions: TransactionRow[]) => void;
   setIsLoading: (isLoading: boolean) => void;
   addTransaction: (transaction: TransactionRow) => void;
+  setTotalIncome?: (income: number) => void;
+  setTotalExpense?: (expense: number) => void;
+  setTotalBalance?: (balnce: number) => void;
+  setTotalFlow?: (flow: number) => void;
 };
 
 export const useTransactions = create<TransactionType>((set) => ({
   transactions: [],
+  totalIncome: 0,
+  totalExpense: 0,
+  totalBalance: 0,
+  totalFlow: 0,
   isLoading: true,
   setTransactions: (transactions) => set({ transactions: transactions }),
   setIsLoading: (isLoading) => set({ isLoading }),
@@ -24,4 +36,8 @@ export const useTransactions = create<TransactionType>((set) => ({
 
       return { transactions: sortedTransactions };
     }),
+  setTotalIncome: (income) => set({ totalIncome: income }),
+  setTotalExpense: (expense) => set({ totalExpense: expense }),
+  setTotalBalance: (balance) => set({ totalBalance: balance }),
+  setTotalFlow: (flow) => set({ totalFlow: flow }),
 }));
