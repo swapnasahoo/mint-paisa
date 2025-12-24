@@ -107,7 +107,7 @@ const MessageCenter = () => {
             {/* BUDGET AMOUNT */}
             <View className="bg-neutral-50 mt-4 px-6 py-2 rounded-lg shadow-sm elevation-xs">
               <Text className="text-4xl text-neutral-950 font-medium">
-                ${budget}
+                ₹{budget}
               </Text>
             </View>
 
