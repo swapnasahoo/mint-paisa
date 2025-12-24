@@ -6,7 +6,7 @@ type TransactionType = {
   isLoading: boolean;
   setTransactions: (transactions: TransactionRow[]) => void;
   setIsLoading: (isLoading: boolean) => void;
-  addTransaction?: (transaction: TransactionRow) => void;
+  addTransaction: (transaction: TransactionRow) => void;
 };
 
 export const useTransactions = create<TransactionType>((set) => ({
