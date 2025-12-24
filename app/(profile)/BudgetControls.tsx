@@ -95,6 +95,54 @@ const MessageCenter = () => {
             </View>
           </KeyboardAvoidingView>
         )}
+
+        {/* OVERVIEW SCREEN */}
+        {screenName === "overview" && (
+          <View className="w-full h-full items-center justify-center">
+            {/* HEADER */}
+            <Text className="text-2xl text-white font-semibold">
+              Budget Overview
+            </Text>
+
+            {/* BUDGET AMOUNT */}
+            <View className="bg-neutral-50 mt-4 px-6 py-2 rounded-lg shadow-sm elevation-xs">
+              <Text className="text-4xl text-neutral-950 font-medium">
+                ${budget}
+              </Text>
+            </View>
+
+            {/* DESCRIPTION */}
+            <Text className="text-center text-sm text-neutral-200 mt-2">
+              You have successfully set your budget limit. Keep track of your
+              expenses and stay within your budget!
+            </Text>
+
+            {/* ACTION BUTTONS */}
+            <View className="gap-2">
+              {/* CONTINUE BUTTON */}
+              <Pressable
+                className="mt-6 bg-neutral-50 w-full px-6 py-3 rounded-full transition-all ease-in-out active:opacity-85 active:scale-[0.98] shadow-sm elevation-xs"
+                onPress={() => {
+                  setScreenName(null);
+                }}
+              >
+                <Text className="text-neutral-950 text-lg font-semibold text-center">
+                  Continue
+                </Text>
+              </Pressable>
+
+              {/* EDIT BUDGET BUTTON */}
+              <Pressable
+                className="transition-all ease-in-out active:opacity-85 active:scale-[0.98]"
+                onPress={() => setScreenName("setBudget")}
+              >
+                <Text className="text-neutral-50 underline text-center">
+                  Edit Budget
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
       </SafeAreaView>
     </View>
   );
