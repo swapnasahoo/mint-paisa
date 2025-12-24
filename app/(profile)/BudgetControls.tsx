@@ -1,3 +1,4 @@
+import { useBudget } from "@/store/useBudget";
 import { useTransactions } from "@/store/useTransaction";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,7 +17,9 @@ type ScreenNameType = "welcome" | "setBudget" | "overview" | null;
 const MessageCenter = () => {
   const [screenName, setScreenName] = useState<ScreenNameType>("welcome");
 
-  const [budget, setBudget] = useState<string>("");
+  const budget = useBudget((s) => s.budget);
+  const setBudget = useBudget((s) => s.setBudget);
+
   const [totalExpense, setTotalExpense] = useState<number>(0);
 
   const expensePercentage = Math.min(totalExpense / Number(budget), 1) * 100;

@@ -1,6 +1,7 @@
 import { account } from "@/libs/appwrite";
 import { fetchTransactions } from "@/services/transaction.service";
 import { makeUserAvatar } from "@/services/userProfile.service";
+import { useBudget } from "@/store/useBudget";
 import { useTransactions } from "@/store/useTransaction";
 import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
@@ -44,6 +45,8 @@ const index = () => {
   const cityName = useUser((s) => s.cityName);
   const setCityName = useUser((s) => s.setCityName);
 
+  const setBudget = useBudget((s) => s.setBudget);
+
   // FETCH USER
   useEffect(() => {
     async function fetchUserId() {
@@ -55,6 +58,10 @@ const index = () => {
       setEmail(user.email);
       setCityName(user.prefs.cityName || null);
       setAvatarUrl(makeUserAvatar(user.name || user.email || ""));
+
+      // set budget in zustand store
+      setBudget(user.prefs.budget || 0);
+      console.log(user.prefs.budget || 0);
     }
 
     fetchUserId();
