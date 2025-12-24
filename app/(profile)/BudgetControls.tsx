@@ -19,6 +19,8 @@ const MessageCenter = () => {
   const [budget, setBudget] = useState<string>("");
   const [totalExpense, setTotalExpense] = useState<number>(0);
 
+  const expensePercentage = Math.min(totalExpense / Number(budget), 1) * 100;
+
   const transactions = useTransactions((s) => s.transactions);
 
   useEffect(() => {
@@ -179,10 +181,14 @@ const MessageCenter = () => {
                 <View
                   style={{
                     height: "100%",
-                    width: `${
-                      Math.min(totalExpense / Number(budget), 1) * 100
-                    }%`,
-                    backgroundColor: "#429690",
+                    width: `${expensePercentage}%`,
+                    backgroundColor: `${
+                      expensePercentage < 70
+                        ? "#34D399"
+                        : expensePercentage < 100
+                        ? "#F59E0B"
+                        : "#EF4444"
+                    }`,
                   }}
                 />
               </View>
