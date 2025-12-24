@@ -35,12 +35,16 @@ const MessageCenter = () => {
   }, []);
 
   useEffect(() => {
+    if (screenName === "setBudget" || screenName === "overview") {
+      return;
+    }
+
     if (!budget || budget === "0") {
       setScreenName("welcome");
     } else {
       setScreenName(null);
     }
-  }, [budget]);
+  }, [budget, screenName]);
 
   return (
     <View className="flex-1 bg-[#429690] px-6 py-4">
