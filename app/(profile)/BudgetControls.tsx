@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useTransactions } from "@/store/useTransaction";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -16,6 +17,17 @@ const MessageCenter = () => {
   const [screenName, setScreenName] = useState<ScreenNameType>("welcome");
 
   const [budget, setBudget] = useState<string>("");
+  const [totalExpense, setTotalExpense] = useState<number>(0);
+
+  const transactions = useTransactions((s) => s.transactions);
+
+  useEffect(() => {
+    const expense = transactions.reduce((acc, transaction) => {
+      return transaction.type === "expense" ? acc + transaction.amount : acc;
+    }, 0);
+
+    setTotalExpense(expense);
+  }, []);
 
   return (
     <View className="flex-1 bg-[#429690] px-6 py-4">
@@ -140,6 +152,40 @@ const MessageCenter = () => {
                   Edit Budget
                 </Text>
               </Pressable>
+            </View>
+          </View>
+        )}
+
+        {!screenName && (
+          <View className="w-full h-full">
+            {/* HEADER */}
+            <Text className="text-2xl text-white font-semibold mb-4">
+              Budget Controls
+            </Text>
+
+            {/* CURRENT EXPENSE + BUDGET */}
+            <View className="bg-neutral-50 px-6 py-3 gap-0.5 rounded-lg shadow-sm elevation-xs transition-all duration-300 ease-in-out active:scale-[0.98]">
+              <Text className="text-neutral-950 text-base">
+                Total Expense:{" "}
+                <Text className="font-medium text-lg">₹{totalExpense}</Text>
+              </Text>
+              <Text className="text-neutral-950 text-base">
+                Budget Limit:{" "}
+                <Text className="font-medium text-lg">₹{budget}</Text>
+              </Text>
+
+              {/* BUDGET BAR */}
+              <View className="w-full h-4 bg-neutral-300 rounded-full overflow-hidden mt-4">
+                <View
+                  style={{
+                    height: "100%",
+                    width: `${
+                      Math.min(totalExpense / Number(budget), 1) * 100
+                    }%`,
+                    backgroundColor: "#429690",
+                  }}
+                />
+              </View>
             </View>
           </View>
         )}
