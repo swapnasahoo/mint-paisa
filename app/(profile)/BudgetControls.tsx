@@ -1,3 +1,5 @@
+import { account } from "@/libs/appwrite";
+import showToast from "@/libs/showToast";
 import { useBudget } from "@/store/useBudget";
 import { useTransactions } from "@/store/useTransaction";
 import React, { useEffect, useState } from "react";
@@ -45,6 +47,25 @@ const MessageCenter = () => {
       setScreenName(null);
     }
   }, [budget, screenName]);
+
+  async function handleSetBudget() {
+    try {
+      await account.updatePrefs({
+        prefs: { budget },
+      });
+      setScreenName("overview");
+      showToast({
+        type: "success",
+        text1: "Budget updated successfully!",
+      });
+    } catch (error) {
+      console.log("Error updating user budget prefs:", error);
+      showToast({
+        type: "error",
+        text1: "Failed to update budget. Please try again.",
+      });
+    }
+  }
 
   return (
     <View className="flex-1 bg-[#429690] px-6 py-4">
@@ -114,7 +135,7 @@ const MessageCenter = () => {
                     alert("Please enter a valid budget amount.");
                     return;
                   }
-                  setScreenName("overview");
+                  handleSetBudget();
                 }}
               >
                 <Text className="text-neutral-950 text-lg font-semibold text-center">
