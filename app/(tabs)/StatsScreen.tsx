@@ -12,7 +12,6 @@ const StatsScreen = () => {
   // useTransactions store
   const transactions = useTransactions((s) => s.transactions);
 
-  const [totalBalance, setTotalBalance] = useState<number>(0);
   const [totalIncome, setTotalIncome] = useState<number>(0);
   const [totalExpense, setTotalExpense] = useState<number>(0);
   const [totalFlow, setTotalFlow] = useState<number>(0);
@@ -37,10 +36,6 @@ const StatsScreen = () => {
 
   // FETCH BALANCES
   useEffect(() => {
-    const balance = transactions.reduce((acc, transaction) => {
-      return acc + transaction.amount;
-    }, 0);
-
     const income = transactions.reduce((acc, transaction) => {
       return transaction.type === "income" ? acc + transaction.amount : acc;
     }, 0);
@@ -53,7 +48,6 @@ const StatsScreen = () => {
 
     setTotalIncome(income || 0);
     setTotalExpense(expense || 0);
-    setTotalBalance(balance || 0);
     setTotalFlow(flow || 0);
   }, [transactions]);
 

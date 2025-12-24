@@ -76,9 +76,6 @@ const index = () => {
       setTransactions(data?.rows || []);
 
       // CALCULATE TOTALS
-      let balance = data?.rows.reduce((acc, transaction) => {
-        return acc + transaction.amount;
-      }, 0);
 
       const income = data?.rows.reduce((acc, transaction) => {
         return transaction.type === "income" ? acc + transaction.amount : acc;
@@ -87,6 +84,8 @@ const index = () => {
       const expense = data?.rows.reduce((acc, transaction) => {
         return transaction.type === "expense" ? acc + transaction.amount : acc;
       }, 0);
+
+      const balance = (income || 0) - (expense || 0);
 
       setTotalBalance(balance || 0);
       setTotalIncome(income || 0);
