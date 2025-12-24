@@ -11,10 +11,10 @@ type TransactionType = {
   setTransactions: (transactions: TransactionRow[]) => void;
   setIsLoading: (isLoading: boolean) => void;
   addTransaction: (transaction: TransactionRow) => void;
-  setTotalIncome?: (income: number) => void;
-  setTotalExpense?: (expense: number) => void;
-  setTotalBalance?: (balnce: number) => void;
-  setTotalFlow?: (flow: number) => void;
+  setTotalIncome: (income: number) => void;
+  setTotalExpense: (expense: number) => void;
+  setTotalBalance: (balnce: number) => void;
+  setTotalFlow: (flow: number) => void;
 };
 
 export const useTransactions = create<TransactionType>((set) => ({
