@@ -1,11 +1,7 @@
-import { account } from "@/libs/appwrite";
-import { fetchTransactions } from "@/services/transaction.service";
-import { makeUserAvatar } from "@/services/userProfile.service";
-import { useBudget } from "@/store/useBudget";
 import { useTransactions } from "@/store/useTransaction";
 import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -23,78 +19,15 @@ const index = () => {
 
   const [isTotalVisible, setIsTotalVisible] = useState<boolean>(true);
 
-  const [userId, setUserId] = useState<string | null>(null);
-
   const transactions = useTransactions((s) => s.transactions);
-  const setTransactions = useTransactions((s) => s.setTransactions);
 
   const isLoading = useTransactions((s) => s.isLoading);
-  const setIsLoading = useTransactions((s) => s.setIsLoading);
-
-  const [totalBalance, setTotalBalance] = useState<number>(0);
-  const [totalIncome, setTotalIncome] = useState<number>(0);
-  const [totalExpense, setTotalExpense] = useState<number>(0);
-
-  const setAvatarUrl = useUser((s) => s.setAvatarUrl);
+  const totalBalance = useTransactions((s) => s.totalBalance);
+  const totalIncome = useTransactions((s) => s.totalIncome);
+  const totalExpense = useTransactions((s) => s.totalExpense);
 
   const name = useUser((s) => s.name);
-  const setName = useUser((s) => s.setName);
-
   const email = useUser((s) => s.email);
-  const setEmail = useUser((s) => s.setEmail);
-  const cityName = useUser((s) => s.cityName);
-  const setCityName = useUser((s) => s.setCityName);
-
-  const setBudget = useBudget((s) => s.setBudget);
-
-  // FETCH USER
-  useEffect(() => {
-    async function fetchUserId() {
-      const user = await account.get();
-      setUserId(user.$id);
-
-      // set user data in zustand store
-      setName(user.name);
-      setEmail(user.email);
-      setCityName(user.prefs.cityName || null);
-      setAvatarUrl(makeUserAvatar(user.name || user.email || ""));
-
-      // set budget in zustand store
-      setBudget(user.prefs.budget || 0);
-      console.log(user.prefs.budget || 0);
-    }
-
-    fetchUserId();
-  }, []);
-
-  // FETCH USER TRANSACTIONS
-  useEffect(() => {
-    async function fetchUserTransactions() {
-      if (!userId) return;
-
-      const data = await fetchTransactions(userId);
-      setTransactions(data?.rows || []);
-
-      // CALCULATE TOTALS
-
-      const income = data?.rows.reduce((acc, transaction) => {
-        return transaction.type === "income" ? acc + transaction.amount : acc;
-      }, 0);
-
-      const expense = data?.rows.reduce((acc, transaction) => {
-        return transaction.type === "expense" ? acc + transaction.amount : acc;
-      }, 0);
-
-      const balance = (income || 0) - (expense || 0);
-
-      setTotalBalance(balance || 0);
-      setTotalIncome(income || 0);
-      setTotalExpense(expense || 0);
-      setIsLoading(false);
-    }
-
-    fetchUserTransactions();
-  }, [userId]);
 
   return (
     <View className="flex-1 bg-neutral-50">
