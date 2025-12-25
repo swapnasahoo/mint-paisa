@@ -12,6 +12,24 @@ interface TransactionSummaryCardProps {
   topValue?: number;
 }
 
+function getTopValue(value: number) {
+  if (value === 4) return "top-4";
+  if (value === 6) return "top-6";
+  if (value === 8) return "top-8";
+  if (value === 10) return "top-10";
+  if (value === 12) return "top-12";
+  if (value === 14) return "top-14";
+  if (value === 16) return "top-16";
+  if (value === 18) return "top-18";
+  if (value === 20) return "top-20";
+  if (value === 22) return "top-22";
+  if (value === 24) return "top-24";
+  if (value === 26) return "top-26";
+  if (value === 28) return "top-28";
+  if (value === 30) return "top-30";
+  return "top-0";
+}
+
 const TransactionSummaryCard = ({
   totalBalance,
   totalIncome,
@@ -22,7 +40,9 @@ const TransactionSummaryCard = ({
 }: TransactionSummaryCardProps) => {
   return (
     <View
-      className={`w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto top-${topValue} rounded-2xl px-6 py-4 shadow-lg elevation-lg`}
+      className={`w-full h-60 bg-linear-to-br from-[#429690] to-[#2F7E79] z-10 mx-auto ${getTopValue(
+        topValue || 0
+      )} rounded-2xl px-6 py-4 shadow-lg elevation-lg`}
     >
       {/* TOTAL BALANCE */}
       <View>
