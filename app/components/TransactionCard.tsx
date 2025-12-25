@@ -1,11 +1,15 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { formatAmount } from "@/libs/formatAmount";
+import { router } from "expo-router";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 
 const TransactionCard = ({ data }: { data: TransactionRow }) => {
   return (
-    <View className="flex-row items-center gap-3 mt-2 mb-2 bg-neutral-50 px-4 py-3 shadow-sm elevation-sm rounded-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]">
+    <Pressable
+      className="flex-row items-center gap-3 mt-2 mb-2 bg-neutral-50 px-4 py-3 shadow-sm elevation-sm rounded-lg transition-all ease-in-out duration-300 active:opacity-75 active:scale-[0.98]"
+      onPress={() => router.push(`/transaction/${data.$id}`)}
+    >
       {/* LOGO / CATEGORY ICON */}
       <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
         <Image
@@ -41,7 +45,7 @@ const TransactionCard = ({ data }: { data: TransactionRow }) => {
           )} `}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
