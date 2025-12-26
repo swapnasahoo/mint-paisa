@@ -12,6 +12,10 @@ type TransactionType = {
   setIsLoading: (isLoading: boolean) => void;
   addTransaction: (transaction: TransactionRow) => void;
   deleteTransaction: (transactionId: string) => void;
+  updateTransaction?: (
+    transactionId: string,
+    updatedData: Partial<TransactionRow>
+  ) => void;
   setTotalIncome: (income: number) => void;
   setTotalExpense: (expense: number) => void;
   setTotalBalance: (balnce: number) => void;
@@ -43,6 +47,17 @@ export const useTransactions = create<TransactionType>((set) => ({
 
       return { transactions: updatedData };
     }),
+  updateTransaction: (transactionId, updatedData) =>
+    set((s) => ({
+      transactions: s.transactions.map((t) =>
+        t.$id === transactionId
+          ? {
+              ...t,
+              ...updatedData,
+            }
+          : t
+      ),
+    })),
   setTotalIncome: (income) => set({ totalIncome: income }),
   setTotalExpense: (expense) => set({ totalExpense: expense }),
   setTotalBalance: (balance) => set({ totalBalance: balance }),
