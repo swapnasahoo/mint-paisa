@@ -1,10 +1,12 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { formatAmount } from "@/libs/formatAmount";
+import showToast from "@/libs/showToast";
+import { deleteTransaction } from "@/services/transaction.service";
 import { useTransactions } from "@/store/useTransaction";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TransactionDetails = () => {
@@ -19,6 +21,36 @@ const TransactionDetails = () => {
     const transactionData = transactions.find((t) => t.$id === transactionId);
     setTransaction(transactionData || null);
   }, [transactionId]);
+
+  async function handleDeleteTransaction() {
+    Alert.alert("Are you sure?", "This action cannot be undone.", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteTransaction(transaction?.$id || "");
+            router.replace("/(tabs)");
+
+            showToast({
+              type: "success",
+              text1: "Transaction deleted successfully",
+            });
+          } catch (e) {
+            console.error(e);
+            showToast({
+              type: "error",
+              text1: "Failed to delete transaction",
+            });
+          }
+        },
+      },
+    ]);
+  }
 
   return (
     <View className="flex-1 bg-neutral-50">
@@ -41,7 +73,7 @@ const TransactionDetails = () => {
               name="trash-outline"
               size={24}
               color="white"
-              onPress={() => {}}
+              onPress={handleDeleteTransaction}
             />
           </View>
 
