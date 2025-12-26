@@ -1,7 +1,10 @@
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { formatAmount } from "@/libs/formatAmount";
 import showToast from "@/libs/showToast";
-import { deleteTransaction } from "@/services/transaction.service";
+import {
+  deleteTransaction,
+  updateTransaction,
+} from "@/services/transaction.service";
 import { useTransactions } from "@/store/useTransaction";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -29,6 +32,7 @@ const TransactionDetails = () => {
 
   const [transaction, setTransaction] = useState<TransactionRow | null>(null);
   const deleteTransactionStore = useTransactions((s) => s.deleteTransaction);
+  const updateTransactionStore = useTransactions((s) => s.updateTransaction);
 
   const [isUpdateModalVisible, setIsUpdateModalVisible] =
     useState<boolean>(false);
@@ -71,6 +75,43 @@ const TransactionDetails = () => {
         },
       },
     ]);
+  }
+
+  async function handleUpdateTransaction() {
+    Alert.alert(
+      "Update Transaction",
+      "Are you sure you want to update this transaction?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Update",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await updateTransaction(transaction?.$id || "", {
+                amount: Number(amount),
+                transactionDate: date.toISOString(),
+              });
+              updateTransactionStore(transaction?.$id || "", {
+                amount: Number(amount),
+                transactionDate: date.toISOString(),
+              });
+
+              showToast({
+                type: "success",
+                text1: "Transaction updated successfully",
+              });
+            } catch (e) {
+              console.error(e);
+              showToast({
+                type: "error",
+                text1: "Failed to update transaction. Please try again.",
+              });
+            }
+          },
+        },
+      ]
+    );
   }
 
   return (
@@ -243,7 +284,10 @@ const TransactionDetails = () => {
             <View className="mt-4">
               <Pressable
                 className="bg-[#69AEA9] px-6 py-2 rounded-md shadow-md elevation-sm transition-all duration-300 ease-in-out active:opacity-75 active:scale-[0.98]"
-                onPress={() => setIsUpdateModalVisible(false)}
+                onPress={() => {
+                  handleUpdateTransaction();
+                  setIsUpdateModalVisible(false);
+                }}
               >
                 <Text className="text-lg text-white font-medium text-center uppercase">
                   Update
