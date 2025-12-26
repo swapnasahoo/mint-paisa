@@ -12,7 +12,7 @@ type TransactionType = {
   setIsLoading: (isLoading: boolean) => void;
   addTransaction: (transaction: TransactionRow) => void;
   deleteTransaction: (transactionId: string) => void;
-  updateTransaction?: (
+  updateTransaction: (
     transactionId: string,
     updatedData: Partial<TransactionRow>
   ) => void;
