@@ -56,3 +56,16 @@ export async function createTransaction({
     return null;
   }
 }
+
+export async function deleteTransaction(transactionId: string) {
+  try {
+    return await tablesDB.deleteRow({
+      databaseId: TRANSACTIONS_DATABASE_ID,
+      tableId: TRANSACTIONS_ENTRIES_TABLE_ID,
+      rowId: transactionId,
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
