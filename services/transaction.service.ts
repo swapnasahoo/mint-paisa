@@ -69,3 +69,23 @@ export async function deleteTransaction(transactionId: string) {
     throw e;
   }
 }
+
+export async function updateTransaction(
+  transactionId: string,
+  updatedData: Partial<TransactionRow>
+) {
+  try {
+    await tablesDB.updateRow({
+      databaseId: TRANSACTIONS_DATABASE_ID,
+      tableId: TRANSACTIONS_ENTRIES_TABLE_ID,
+      rowId: transactionId,
+      data: {
+        amount: updatedData.amount,
+        transactionDate: updatedData.transactionDate,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+}
