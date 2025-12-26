@@ -14,6 +14,7 @@ const TransactionDetails = () => {
 
   const transactions = useTransactions((s) => s.transactions);
   const [transaction, setTransaction] = useState<TransactionRow | null>(null);
+  const deleteTransactionStore = useTransactions((s) => s.deleteTransaction);
 
   useEffect(() => {
     if (!transactionId) return;
@@ -34,6 +35,7 @@ const TransactionDetails = () => {
         onPress: async () => {
           try {
             await deleteTransaction(transaction?.$id || "");
+            deleteTransactionStore(transaction?.$id || "");
             router.replace("/(tabs)");
 
             showToast({

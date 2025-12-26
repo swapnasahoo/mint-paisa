@@ -11,6 +11,7 @@ type TransactionType = {
   setTransactions: (transactions: TransactionRow[]) => void;
   setIsLoading: (isLoading: boolean) => void;
   addTransaction: (transaction: TransactionRow) => void;
+  deleteTransaction: (transactionId: string) => void;
   setTotalIncome: (income: number) => void;
   setTotalExpense: (expense: number) => void;
   setTotalBalance: (balnce: number) => void;
@@ -35,6 +36,12 @@ export const useTransactions = create<TransactionType>((set) => ({
       );
 
       return { transactions: sortedTransactions };
+    }),
+  deleteTransaction: (transactionId) =>
+    set((s) => {
+      const updatedData = s.transactions.filter((t) => t.$id !== transactionId);
+
+      return { transactions: updatedData };
     }),
   setTotalIncome: (income) => set({ totalIncome: income }),
   setTotalExpense: (expense) => set({ totalExpense: expense }),
