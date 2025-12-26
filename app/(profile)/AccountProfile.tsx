@@ -9,7 +9,15 @@ import { useUser } from "@/store/useUser";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Modal, Pressable, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { Models } from "react-native-appwrite";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -272,6 +280,15 @@ const AccountProfile = () => {
       {/* EMAIL UPDATE MODAL */}
       <Modal visible={emailModalVisible} transparent animationType="fade">
         <View className="flex-1 justify-center items-center">
+          {/* OVERLAY */}
+          <Pressable
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+            onPress={() => setEmailModalVisible(false)}
+          />
+
           <View className="w-80 h-55 bg-neutral-50 rounded-xl px-6 py-4 shadow-md elevation-sm">
             <Text className="text-lg font-medium mb-2">Update Email</Text>
             <TextInput
