@@ -1,8 +1,9 @@
+import { transactinCategoryIcons } from "@/constants/data/transactionCategoryIcons";
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { formatAmount } from "@/libs/formatAmount";
 import { router } from "expo-router";
 import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const TransactionCard = ({ data }: { data: TransactionRow }) => {
   return (
@@ -12,10 +13,7 @@ const TransactionCard = ({ data }: { data: TransactionRow }) => {
     >
       {/* LOGO / CATEGORY ICON */}
       <View className="bg-neutral-200/50 border border-neutral-200/60 p-2 rounded-lg items-center justify-center">
-        <Image
-          source={require("../../assets/icons/category-icons/youtube-premium.png")}
-          className="size-8"
-        />
+        {transactinCategoryIcons[data.category]}
       </View>
 
       {/* BRAND / CATEGORY NAME + DATE */}

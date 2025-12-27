@@ -1,3 +1,4 @@
+import { transactinCategoryIcons } from "@/constants/data/transactionCategoryIcons";
 import { TransactionRow } from "@/interfaces/TransactionRow";
 import { formatAmount } from "@/libs/formatAmount";
 import showToast from "@/libs/showToast";
@@ -12,7 +13,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
-  Image,
   Modal,
   Pressable,
   StyleSheet,
@@ -162,10 +162,7 @@ const TransactionDetails = () => {
             {/* CATEGORY */}
             <View className="flex-row items-center gap-4">
               <View className="bg-neutral-200/20 px-2 py-1 border border-neutral-200/30 rounded-lg">
-                <Image
-                  source={require("../../assets/icons/category-icons/youtube-premium.png")}
-                  className="size-7"
-                />
+                {transactinCategoryIcons[transaction?.category || ""]}
               </View>
 
               <Text className="uppercase font-medium">
