@@ -96,6 +96,15 @@ const TransactionDetails = () => {
                 amount: Number(amount),
                 transactionDate: date.toISOString(),
               });
+              setTransaction((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      amount: Number(amount),
+                      transactionDate: date.toISOString(),
+                    }
+                  : prev
+              );
 
               showToast({
                 type: "success",
