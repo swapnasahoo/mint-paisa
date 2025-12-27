@@ -36,7 +36,6 @@ export default function RootLayout() {
       setEmail(user.email);
       setAvatarUrl(makeUserAvatar(user.name || user.email.split("@")[0] || ""));
       setCity(user.prefs.cityName || "");
-      console.log("User data fetched:", user);
     }
     fetchUserData();
   }, []);
@@ -67,7 +66,6 @@ export default function RootLayout() {
       setTotalExpense(expense || 0);
       setTotalBalance(balance || 0);
       setTotalFlow(flow || 0);
-      console.log("Transactions fetched:", transactionData?.rows || []);
 
       setIsLoading(false);
     }
