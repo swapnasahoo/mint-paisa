@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   Pressable,
   StatusBar,
   Text,
@@ -88,6 +89,18 @@ const index = () => {
             renderItem={({ item }) => (
               /* TRANSACTION CARD */
               <TransactionCard data={item} />
+            )}
+            ListEmptyComponent={() => (
+              <View>
+                <Image
+                  source={require("../../assets/images/illustrations/transactions-empty-state.png")}
+                  className="size-50 mx-auto"
+                />
+
+                <Text className="text-center text-gray-400 mt-3.5">
+                  No transactions found.{"\n"}Add one to get started!
+                </Text>
+              </View>
             )}
           />
         </View>
