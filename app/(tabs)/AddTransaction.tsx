@@ -26,7 +26,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const AddTransaction = () => {
   StatusBar.setBarStyle("light-content");
 
+  const totalExpnese = useTransactions((s) => s.totalExpense);
+
   const addTransaction = useTransactions((s) => s.addTransaction);
+  const setTotalIncome = useTransactions((s) => s.setTotalIncome);
+  const setTotalExpense = useTransactions((s) => s.setTotalExpense);
+  const setTotalBalance = useTransactions((s) => s.setTotalBalance);
+  const setTotalFlow = useTransactions((s) => s.setTotalFlow);
 
   const [type, setType] = useState<"income" | "expense">("income");
   const [category, setCategory] = useState<string>("");
@@ -35,7 +41,6 @@ const AddTransaction = () => {
   const [userId, setUserId] = useState<string>("");
 
   const budget = useBudget((s) => s.budget);
-  const [totalExpnese, setTotalExpense] = useState<number>(0);
 
   const transactions = useTransactions((s) => s.transactions);
 
@@ -54,11 +59,22 @@ const AddTransaction = () => {
   }, []);
 
   useEffect(() => {
+    // update balances in zustand store
+    const income = transactions.reduce((acc, transactions) => {
+      return transactions.type === "income" ? acc + transactions.amount : acc;
+    }, 0);
+
     const expense = transactions.reduce((acc, transaction) => {
       return transaction.type === "expense" ? acc + transaction.amount : acc;
     }, 0);
 
+    const balance = (income || 0) - (expense || 0);
+    const flow = (income || 0) + (expense || 0);
+
+    setTotalIncome(income);
     setTotalExpense(expense);
+    setTotalBalance(balance);
+    setTotalFlow(flow);
   }, [transactions]);
 
   function handleBudgetExceeded() {
