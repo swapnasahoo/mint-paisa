@@ -133,7 +133,7 @@ const StatsScreen = () => {
               <View className="flex-1 bg-green-400/20 px-3 py-1 rounded-lg border border-green-400/25">
                 <Text className="text-sm text-green-700">Income</Text>
                 <Text className="text-green-500 text-lg font-semibold">
-                  {((totalIncome / totalFlow) * 100).toFixed(2)}%
+                  {((totalIncome / totalFlow) * 100 || 0).toFixed(2)}%
                 </Text>
               </View>
 
@@ -141,7 +141,7 @@ const StatsScreen = () => {
               <View className="flex-1 bg-red-400/20 px-3 py-1 rounded-lg border border-red-400/25">
                 <Text className="text-sm text-red-700">Expense</Text>
                 <Text className="text-red-500 text-lg font-semibold">
-                  {((totalExpense / totalFlow) * 100).toFixed(2)}%
+                  {((totalExpense / totalFlow) * 100 || 0).toFixed(2)}%
                 </Text>
               </View>
             </View>
