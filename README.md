@@ -44,13 +44,6 @@ cd mint-paisa
 # Install dependencies
 npm install
 
-# Create .env file
- Add these values in .env file
-EXPO_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
-EXPO_PUBLIC_APPWRITE_API_ENDPOINT=https://cloud.appwrite.io/v1
-EXPO_PUBLIC_APPWRITE_DATABASE_TRANSACTIONS_ID=your_database_id
-EXPO_PUBLIC_APPWRITE_TABLE_TRANSACTIONS_ENTRIES_ID=entries
-
 # Start the app
 npm start
 ```
